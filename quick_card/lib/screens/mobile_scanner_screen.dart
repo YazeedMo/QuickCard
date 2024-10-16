@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:quick_card/data/card_db.dart';
 
 class MobileScannerScreen extends StatefulWidget {
   @override
@@ -11,8 +13,21 @@ class MobileScannerScreen extends StatefulWidget {
 class _MobileScannerScreenState extends State<MobileScannerScreen> {
   String? barcodeValue;
   BarcodeFormat? barcodeFormat;
-
   bool isScanning = true;
+  MobileScannerController? mobileScannerController;
+
+  @override
+  void initState() {
+    super.initState();
+    mobileScannerController = MobileScannerController();
+    isScanning = true;
+  }
+
+  @override
+  void dispose() {
+    mobileScannerController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +39,7 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
             icon: Icon(Icons.flash_on),
             onPressed: () {
               setState(() {
-                // Toggle flashlight logic (implement torch control if needed)
+                mobileScannerController?.toggleTorch();
               });
             },
           ),
@@ -32,25 +47,23 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
       ),
       body: isScanning
           ? MobileScanner(
+              controller: mobileScannerController,
               onDetect: (barcodeCapture) {
                 setState(() {
                   final barcode = barcodeCapture.barcodes.first;
-                  // Store the scanned barcode value
                   barcodeValue = barcode.rawValue;
-                  // Get the format of the barcode
                   barcodeFormat = barcode.format;
 
                   if (barcodeValue != null) {
                     // Stop further scanning and return the value
-                    setState(() {
-                      isScanning = false;
-                    });
+                    isScanning = false;
+                    mobileScannerController?.dispose();
+                    // Pop the screen and pass the scanned barcode back to the main screen
                   }
-                  // Pop the screen and pass the scanned barcode back to the main screen
-                  Navigator.pop(context, {
-                      'code': barcodeValue,
-                      'type': barcodeFormat,
-                  });
+                });
+                Navigator.pop(context, {
+                  'code': barcodeValue,
+                  'type': barcodeFormat,
                 });
               },
             )
