@@ -1,17 +1,18 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quick_card/entity/card.dart' as qc;
 
 class CardTile extends StatelessWidget {
-  final String svg;
-  final String cardTitle;
+  final qc.Card card;
   final Function(BuildContext)? deleteFunction;
   final VoidCallback onTap;
 
   const CardTile(
       {super.key,
-      required this.svg,
-      required this.cardTitle,
+      required this.card,
       required this.deleteFunction,
       required this.onTap});
 
@@ -33,7 +34,7 @@ class CardTile extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.orangeAccent, Colors.yellow],
+                colors: [Color(0xff382EF2), Color(0xff8EE4DF)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -61,7 +62,7 @@ class CardTile extends StatelessWidget {
                     ),
                     child: Center(
                       child: SvgPicture.string(
-                        svg,
+                        card.svg,
                         width: 60, // Resize for better visuals
                         height: 60,
                       ),
@@ -74,7 +75,7 @@ class CardTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          cardTitle,
+                          card.name,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

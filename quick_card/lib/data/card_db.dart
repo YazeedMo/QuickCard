@@ -1,16 +1,51 @@
 import 'package:hive/hive.dart';
 
-class CardDatabase {
-  List cardList = [];
+import '../entity/card.dart';
 
-  final cardBox = Hive.box("cardBox");
+class CardDB {
+  static const String _boxName = 'cardBox';
 
-  // Load data from database
-  void loadData() {
-    cardList = cardBox.get("CARDLIST");
+  // Open the Hive box
+  Future<void> openBox() async {
+    await Hive.openBox<Card>(_boxName);
   }
 
-  void updateDatabase() {
-    cardBox.put("CARDLIST", cardList);
+  // Create a card
+  Future<int> saveCard(Card card) async {
+    try {
+      final box = Hive.box<Card>(_boxName);
+      final key = await box.add(card);
+      return key;
+    }
+    catch (e) {
+      print('error: $e');
+    }
+
+    return -3;
+
+  }
+
+  // Get a card by key
+  Card? getCard(int key) {
+    final box = Hive.box<Card>(_boxName);
+    return box.get(key);
+  }
+
+  // Get all cards
+  List<Card> getAllCards() {
+    final box = Hive.box<Card>(_boxName);
+    return box.values.toList();
+  }
+
+  // Delete a card by index
+  Future<void> deleteCardByIndex(int index) async {
+    final box = Hive.box<Card>(_boxName);
+    await box.deleteAt(index);
+  }
+
+  // Close the box when done
+  Future<void> closeBox() async {
+    final box = Hive.box<Card>(_boxName);
+    await box.close();
   }
 }

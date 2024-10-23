@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:quick_card/screens/home_screen.dart';
+// ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:quick_card/data/hive_config.dart';
+import 'package:quick_card/entity/card.dart' as qc;
+import 'package:quick_card/screens/login_screen.dart';
 void main() async {
 
-  // Initialize the Hive
-  await Hive.initFlutter();
-  await Hive.openBox("cardBox");
+  await HiveConfig().startHive();
+
+  var cardBox = await Hive.openBox<qc.Card>('cardBox');
 
   runApp(const MyApp());
 }
@@ -17,9 +19,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

@@ -1,112 +1,125 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
-import 'package:barcode/src/barcode.dart' as bc;
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:quick_card/components/card_tile.dart';
-import 'package:quick_card/data/card_db.dart';
-import 'package:quick_card/screens/code_display_screen.dart';
-import 'dart:typed_data';
 import 'package:quick_card/screens/mobile_scanner_screen.dart';
-import 'package:quick_card/util/barcode_utils.dart';
+import 'package:quick_card/screens/svg_display_screen.dart';
+
+import '../components/card_tile.dart';
+import '../service/card_service.dart';
+import 'package:quick_card/entity/card.dart' as qc;
+import 'package:barcode/src/barcode.dart' as bc;
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? scannedCode;
-  BarcodeFormat? scannedCodeFormat;
-  bc.Barcode? barcodeType;
-  String? scannedCodeFormatString;
-  String? svg;
-  CardDatabase db = CardDatabase();
+  String message = 'No code scanned yet';
+  final CardService _cardService = CardService();
+  List<qc.Card> _cards = [];
+  List<int> _keys = [];
 
-  void openCardBox() async {
-    var cardBox = Hive.box("cardBox");
-
-    if (cardBox.get("CARDLIST") != null) {
-      db.loadData();
-    }
-  }
 
   @override
   void initState() {
-    openCardBox();
     super.initState();
+    _loadCards();
   }
 
-  void openScanner() async {
-    // Navigate to the barcode scanner screen
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MobileScannerScreen()),
-    );
-
-    // Once returned, set the scanned code value
-    if (result != null) {
-      setState(() {
-        scannedCode = result['code'];
-        scannedCodeFormat = result['type'];
-        if (scannedCodeFormat != null) {
-          scannedCodeFormatString =
-              scannedCodeFormat.toString().split('.').last;
-        }
-        barcodeType = BarcodeUtils().getBarcodeType(scannedCodeFormat);
-        svg = barcodeType!.toSvg(scannedCode!, width: 300, height: 100);
-        db.cardList.add(svg);
-        db.updateDatabase();
-      });
-    }
-  }
-
-  void deleteCard(int index) {
+  Future<void> _loadCards() async {
+    await _cardService.init();
+    final allCards = _cardService.getAllCards();
     setState(() {
-      db.cardList.removeAt(index);
-      db.updateDatabase();
+      _cards = allCards;
+      _keys = List.generate(allCards.length, (index) => index); // Store keys based on index
     });
   }
 
-  void displayCode(int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SvgDisplayScreen(svg: db.cardList[index])));
+  void _deleteCard(int index) async {
+    await _cardService.deleteCardByIndex(index); // Delete from the database
+
+    // After deletion, refresh the list of cards
+    setState(() {
+      // Remove card by finding the index of the key
+      int indexToRemove = _keys.indexOf(index);
+      if (indexToRemove != -1) {
+        _cards.removeAt(indexToRemove); // Remove card from the list
+        _keys.removeAt(indexToRemove); // Remove the corresponding key
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text("All Cards"),
-          ),
-          backgroundColor: Colors.grey[500],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: openScanner,
-          child: Icon(Icons.add),
-        ),
-        body: db.cardList.length == 0
-            ? Center(
-                child: Text(
-                  "No code scanned yet",
-                  style: TextStyle(fontSize: 20.0),
-                ),
-              )
-            : ListView.builder(
-                itemCount: db.cardList.length,
-                itemBuilder: (context, index) {
-                  return CardTile(
-                    svg: db.cardList[index]!,
-                    cardTitle: 'title placeholder',
-                    deleteFunction: (context) => deleteCard(index),
-                    onTap: () => displayCode(index),
-                  );
-                }));
+      appBar: AppBar(title: const Text('Loyalty Cards')),
+      body: _cards.isEmpty ?
+          Center(
+            child: Text(
+              message,
+              style: TextStyle(fontSize: 20.0),
+            ),
+          )
+      :
+      ListView.builder(
+        itemCount: _cards.length,
+        itemBuilder: (context, index) {
+          final card = _cards[index];
+          final key = _keys[index]; // Get the corresponding key
+          return CardTile(
+            card: card,
+            deleteFunction: (context) => _deleteCard(key), // Pass the key to delete
+            onTap: () {
+              Navigator.push(
+                context,
+              MaterialPageRoute(builder: (context) => SvgDisplayScreen(svg: card.svg)));
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addNewCard(); // Implement this function to handle adding a new card
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Color(0xff8EE4DF),
+      ),
+    );
+  }
+
+  Future<void> _addNewCard() async {
+
+    final result = await Navigator.push(
+        context,
+    MaterialPageRoute(builder: (context) => MobileScannerScreen()));
+
+    if (result != null && result is Map<String, dynamic>) {
+
+      String barcodeData = result['data'];
+      bc.Barcode barcodeFormat = result['format'];
+
+      qc.Card newCard = qc.Card(
+        name: 'Card Name',
+        data: barcodeData,
+        barcodeFormat: barcodeFormat.toString(),
+        svg: barcodeFormat.toSvg(barcodeData, width: 300, height: 100),
+      );
+
+
+      // Save the new card and get the autogenerated key
+      int key = await _cardService.saveCard(newCard);
+      setState(() {
+        _loadCards(); // Reload cards to reflect the new addition
+      });
+
+    }
+
+  }
+
+  @override
+  void dispose() {
+    _cardService.close();
+    super.dispose();
   }
 }

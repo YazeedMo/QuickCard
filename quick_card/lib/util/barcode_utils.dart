@@ -18,4 +18,5 @@ class BarcodeUtils {
         return bc.Barcode.code128();
     }
   }
+
 }

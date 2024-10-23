@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:quick_card/data/card_db.dart';
+import 'package:barcode/barcode.dart' as bc;
+import 'package:quick_card/util/barcode_utils.dart';
 
 class MobileScannerScreen extends StatefulWidget {
   @override
@@ -11,8 +11,12 @@ class MobileScannerScreen extends StatefulWidget {
 }
 
 class _MobileScannerScreenState extends State<MobileScannerScreen> {
-  String? barcodeValue;
+
+  final BarcodeUtils _barcodeUtils = BarcodeUtils();
+
+  String? barcodeData;
   BarcodeFormat? barcodeFormat;
+  bc.Barcode? barcodeType;
   bool isScanning = true;
   MobileScannerController? mobileScannerController;
 
@@ -51,19 +55,20 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
               onDetect: (barcodeCapture) {
                 setState(() {
                   final barcode = barcodeCapture.barcodes.first;
-                  barcodeValue = barcode.rawValue;
+                  barcodeData = barcode.rawValue;
                   barcodeFormat = barcode.format;
 
-                  if (barcodeValue != null) {
+                  if (barcodeData != null) {
                     // Stop further scanning and return the value
                     isScanning = false;
                     mobileScannerController?.dispose();
+                    barcodeType = _barcodeUtils.getBarcodeType(barcodeFormat);
                     // Pop the screen and pass the scanned barcode back to the main screen
                   }
                 });
                 Navigator.pop(context, {
-                  'code': barcodeValue,
-                  'type': barcodeFormat,
+                  'data': barcodeData,
+                  'format': barcodeType,
                 });
               },
             )
@@ -73,13 +78,13 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-      bottomSheet: barcodeValue != null
+      bottomSheet: barcodeData != null
           ? Container(
               color: Colors.white,
               height: 100,
               child: Center(
                 child: Text(
-                  'Scanned Code: $barcodeValue',
+                  'Scanned Code: $barcodeData',
                   style: TextStyle(fontSize: 18),
                 ),
               ),
