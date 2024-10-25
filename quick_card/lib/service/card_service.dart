@@ -4,10 +4,6 @@ import '../entity/card.dart';
 class CardService {
   final CardDB _cardDB = CardDB();
 
-  Future<void> init() async {
-    await _cardDB.openBox();
-  }
-
   Future<int> saveCard(Card card) async {
     return await _cardDB.saveCard(card);
   }
@@ -17,7 +13,6 @@ class CardService {
   }
 
   List<Card> getAllCards() {
-    // Business
     return _cardDB.getAllCards();
   }
 

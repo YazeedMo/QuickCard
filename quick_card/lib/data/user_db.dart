@@ -4,11 +4,6 @@ import 'package:quick_card/entity/user.dart';
 class UserDB {
   final String _boxName = 'userBox';
 
-  // Open the Hive box
-  Future<void> openBox() async {
-    await Hive.openBox<User>(_boxName);
-  }
-
   // Create new User
   Future<int> createUser(User user) async {
     try {
@@ -29,4 +24,5 @@ class UserDB {
     final box = Hive.box<User>(_boxName);
     return box.values.toList();
   }
+
 }

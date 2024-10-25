@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadCards() async {
-    await _cardService.init();
     final allCards = _cardService.getAllCards();
     setState(() {
       _cards = allCards;

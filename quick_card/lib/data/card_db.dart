@@ -5,11 +5,6 @@ import '../entity/card.dart';
 class CardDB {
   static const String _boxName = 'cardBox';
 
-  // Open the Hive box
-  Future<void> openBox() async {
-    await Hive.openBox<Card>(_boxName);
-  }
-
   // Create a card
   Future<int> saveCard(Card card) async {
     try {
