@@ -1,6 +1,8 @@
 // card_detail_screen.dart
 
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
+
+import 'dart:io';
 
 import 'package:barcode/barcode.dart' as bc;
 import 'package:flutter/material.dart';
@@ -13,29 +15,48 @@ import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
 import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/service/user_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CardDetailScreen extends StatefulWidget {
   final String barcodeData;
   final BarcodeFormat barcodeFormat;
   final bc.Barcode barcodeType;
 
-  CardDetailScreen({required this.barcodeData, required this.barcodeFormat, required this.barcodeType});
+  CardDetailScreen(
+      {required this.barcodeData,
+      required this.barcodeFormat,
+      required this.barcodeType});
 
   @override
   _CardDetailScreenState createState() => _CardDetailScreenState();
 }
 
 class _CardDetailScreenState extends State<CardDetailScreen> {
-
   final UserService _userService = UserService();
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
   final SessionService _sessionService = SessionService();
+  final ImagePicker _picker = ImagePicker();
 
   final _formKey = GlobalKey<FormState>();
   String _cardName = '';
   String _cardDescription = '';
-  String _cardImage = '';
+  String _cardImagePath = '';
+  File? _selectedImageFile;
+
+  // Function to pick image from gallery
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImageFile = File(pickedFile.path);
+        _cardImagePath = pickedFile.path;
+      });
+    } else {
+      print("No image selected");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +95,12 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 },
               ),
               // Image picker?
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Image URL'),
-                onSaved: (value) {
-                  _cardImage = value ?? '';
-                },
-              ),
+              _selectedImageFile != null
+                  ? Image.file(_selectedImageFile!, height: 150)
+                  : ElevatedButton(
+                      onPressed: _pickImage,
+                      child: Text('Pick Image from Gallery'),
+                    ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submit,
@@ -92,13 +113,13 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
     );
   }
 
-  void _submit() async{
-
+  void _submit() async {
     Session? session = await _sessionService.getCurrentSession();
     User? currentUser = await _userService.getUserById(session!.currentUser!);
-    List allUserFolders = await _folderService.getFoldersByUserId(currentUser!.id!);
-    Folder userDefaultFolder = await allUserFolders.firstWhere((folder) => folder.name == 'default');
-
+    List allUserFolders =
+        await _folderService.getFoldersByUserId(currentUser!.id!);
+    Folder userDefaultFolder =
+        await allUserFolders.firstWhere((folder) => folder.name == 'default');
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -108,14 +129,16 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
         name: _cardName,
         data: widget.barcodeData,
         barcodeFormat: widget.barcodeFormat.toString(),
-        svg: widget.barcodeType.toSvg(widget.barcodeData, width: 300, height: 100), // You can generate SVG based on the barcode data if needed
-        folderId: userDefaultFolder.id!, // Update this based on your folder logic
+        svg: widget.barcodeType.toSvg(widget.barcodeData,
+            width: 300,
+            height: 100),
+        folderId: userDefaultFolder.id!,
+        imagePath: _cardImagePath
       );
 
       // Save the card and return to the HomeScreen
       _cardService.createCard(newCard);
       Navigator.pop(context, true);
-
     }
   }
 }
