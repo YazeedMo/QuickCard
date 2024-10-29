@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/user.dart';
+import 'package:quick_card/screens/cards_screen.dart';
 import 'package:quick_card/screens/login_screen.dart';
-import 'package:quick_card/screens/mobile_scanner_screen.dart';
-import 'package:quick_card/screens/svg_display_screen.dart';
-import 'package:quick_card/entity/card.dart' as c;
 import 'package:quick_card/service/folder_service.dart';
 import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/user_service.dart';
-import '../components/card_tile.dart';
-import 'package:barcode/src/barcode.dart' as bc;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -28,6 +24,35 @@ class _HomeScreenState extends State<HomeScreen> {
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
   List<dynamic> _cards = [];
+  int _selectedIndex = 0;
+
+  final List<Widget> _screens = [
+    CardsScreen(),
+    BlankScreen(), // Folders screen
+    BlankScreen(), // Shopping List screen
+    BlankScreen(), // Account screen
+  ];
+
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        title = "All Cards";
+        break;
+      case 1:
+        title = "Folders";
+        break;
+      case 2:
+        title = "Shopping List";
+        break;
+      case 3:
+        title = "Account";
+        break;
+    }
+    setState(() {
+      title;
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -39,18 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
     Session? currentSession = await _sessionService.getCurrentSession();
     int? currentUserId = currentSession!.currentUser;
     User? user = await _userService.getUserById(currentUserId!);
-    List allUserFolders = await _folderService.getFoldersByUserId(currentUserId);
-    Folder userDefaultFolder = allUserFolders.firstWhere((folder) => folder.name == 'default');
-    List allCards = await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
+    List allUserFolders =
+        await _folderService.getFoldersByUserId(currentUserId);
+    Folder userDefaultFolder =
+        allUserFolders.firstWhere((folder) => folder.name == 'default');
+    List allCards =
+        await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
     setState(() {
       title = '${user!.username}\'s Cards';
       _cards = allCards;
     });
-  }
-
-  void _deleteCard(int id) async {
-    await _cardService.deleteCardById(id);
-    _loadCards(); // Reload the list of cards after deletion
   }
 
   void _logout() async {
@@ -58,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await _sessionService.clearSession();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => LoginScreen()),
-          (route) => false, // This will remove all routes before the LoginScreen
+      (route) => false, // This will remove all routes before the LoginScreen
     );
   }
 
@@ -74,46 +97,80 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: _cards.isEmpty
-          ? Center(
-        child: Text(
-          message,
-          style: TextStyle(fontSize: 20.0),
-        ),
-      )
-          : ListView.builder(
-        itemCount: _cards.length,
-        itemBuilder: (context, index) {
-          final card = _cards[index];
-          return CardTile(
-            card: card,
-            deleteFunction: (context) => _deleteCard(card.id), // Pass the key to delete
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SvgDisplayScreen(svg: card.svg),
-                ),
-              );
-            },
-          );
-        },
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.credit_card),
+            label: 'Cards',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.folder),
+            label: 'Folders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Shopping List',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Account',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.tealAccent,
+        unselectedItemColor: Colors.black54,
+        backgroundColor: Colors.white,
+        onTap: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewCard,
-        backgroundColor: Color(0xff8EE4DF),
-        child: const Icon(Icons.add),
-      ),
+      // body: _cards.isEmpty
+      //     ? Center(
+      //         child: Text(
+      //           message,
+      //           style: TextStyle(fontSize: 20.0),
+      //         ),
+      //       )
+      //     : ListView.builder(
+      //         itemCount: _cards.length,
+      //         itemBuilder: (context, index) {
+      //           final card = _cards[index];
+      //           return CardTile(
+      //             card: card,
+      //             deleteFunction: (context) =>
+      //                 _deleteCard(card.id), // Pass the key to delete
+      //             onTap: () {
+      //               Navigator.push(
+      //                 context,
+      //                 MaterialPageRoute(
+      //                   builder: (context) => SvgDisplayScreen(svg: card.svg),
+      //                 ),
+      //               );
+      //             },
+      //           );
+      //         },
+      //       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _addNewCard,
+      //   backgroundColor: Color(0xff8EE4DF),
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
+}
 
-  Future<void> _addNewCard() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MobileScannerScreen()),
+// Blank screen widget for other tabs
+class BlankScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Text(
+          'Blank Screen',
+          style: TextStyle(fontSize: 24, color: Colors.grey),
+        ),
+      ),
     );
-    if (result == true) {
-      _loadCards();
-    }
   }
 }
