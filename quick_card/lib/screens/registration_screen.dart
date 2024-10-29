@@ -20,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   String errorMessage = '';
   bool _stayLoggedIn = true;
 
@@ -29,6 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -36,6 +38,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String username = _usernameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
 
     // Clear any previous error messages
     setState(() {
@@ -43,13 +46,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     });
 
     // Validate user input
-    if (_validateInputs(username, email, password)) return;
+    if (_validateInputs(username, email, password, confirmPassword)) return;
 
     User user = User(username: username, email: email, password: password);
     await _registerUser(user);
   }
 
-  bool _validateInputs(String username, String email, String password) {
+  bool _validateInputs(String username, String email, String password, String confirmPassword) {
     if (username.isEmpty) {
       setState(() {
         errorMessage = "Please enter username";
@@ -65,6 +68,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (password.isEmpty) {
       setState(() {
         errorMessage = "Please enter password";
+      });
+      return true;
+    }
+    if (confirmPassword.isEmpty) {
+      setState(() {
+        errorMessage = "Please confirm password";
+      });
+      return true;
+    }
+    if (password != confirmPassword) {
+      setState(() {
+        errorMessage = "Ensure passwords are the same";
       });
       return true;
     }
@@ -105,17 +120,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QuickCard Registration'),
-        centerTitle: true,
+          toolbarHeight: 200.0,
+          centerTitle: true,
+          title: Stack(
+              children: [
+                Positioned(
+                  left: 5,
+                  top: 25,
+                  child: ClipOval(
+                    child: Opacity(
+                      opacity: 0.9,
+                      child: Image.asset(
+                        'assets/holographic.jpeg',
+                        width: 1,
+                        height: 1,
+                        fit: BoxFit.cover, // Ensures the image fills the oval shape
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: Text(
+                    'register',
+                    style: TextStyle(fontSize: 50.0,),
+                  ),
+                ),
+              ]
+          )
+
+
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(bottom: 100.0,
+            left: 16.0, right: 16.0
+        ),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Text('create your account', textAlign: TextAlign.center,),
                 // Error message (initially invisible)
                 Visibility(
                   visible: errorMessage.isNotEmpty,
@@ -125,15 +171,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
+
+                /*ClipOval(
+              child: Opacity(
+                opacity: 0.9,
+                child: Image.asset(
+                  'assets/holographic.jpeg',
+                  width: 5,
+                  height: 15,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),*/
+
                 SizedBox(height: 16.0),
                 // Username input field
-                _buildTextField(_usernameController, 'Username'),
+                _buildTextField(_usernameController, 'username'),
                 SizedBox(height: 16.0),
                 // Email input field
-                _buildTextField(_emailController, 'Email'),
+                _buildTextField(_emailController, 'email'),
                 SizedBox(height: 16.0),
                 // Password input field
-                _buildTextField(_passwordController, 'Password', obscureText: true),
+                _buildTextField(_passwordController, 'password', obscureText: true),
+                SizedBox(height: 16.0),
+                // Confirm Password input field
+                _buildTextField(_confirmPasswordController, 'confirm password'),
                 SizedBox(height: 10.0),
                 // Stay logged in checkbox
                 CheckboxListTile(
@@ -146,12 +208,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(height: 64.0,),
                 // Register button
                 ElevatedButton(
                   onPressed: _handleRegistration,
-                  child: Text('Register'),
+                  style: ElevatedButton.styleFrom(
+
+                    backgroundColor: Color (0xff8EE4DF), // Background color
+                    foregroundColor: Colors.black, // Text color
+                  ),
+                  child: Text(
+                    'register',
+                    style: TextStyle(
+                        fontSize: 24.0, fontWeight: FontWeight.bold
+                    ),
+                  ),
                 ),
+
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'already have an account? ',
+                        children: [
+                          TextSpan(
+                            text: 'login', // Bold text
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
