@@ -1,28 +1,50 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:quick_card/data/hive_config.dart';
-import 'package:quick_card/entity/card.dart' as qc;
+import 'package:quick_card/entity/session.dart';
+import 'package:quick_card/screens/home_screen.dart';
 import 'package:quick_card/screens/login_screen.dart';
+import 'package:quick_card/screens/splash_screen_main.dart';
+import 'package:quick_card/service/session_service.dart';
+
 void main() async {
+  // Ensure Flutter binding is initialized before using any async code
+  WidgetsFlutterBinding.ensureInitialized();
 
-  await HiveConfig().startHive();
-
-  var cardBox = await Hive.openBox<qc.Card>('cardBox');
-
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final SessionService _sessionService = SessionService();
+
+  Future<bool> _initializeAndCheckStayLoggedIn() async {
+    // Simulating a longer loading time for testing
+    await Future.delayed(Duration(seconds: 2));
+    // Initialize session if needed
+    Session session = await _sessionService.initializeSessionIfNeeded();
+    // Return the stayLoggedIn status from the session
+    return session.stayLoggedIn ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: FutureBuilder<bool>(
+        future: _initializeAndCheckStayLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreenMain();
+          }
+          if (snapshot.hasData && snapshot.data == true) {
+            return HomeScreen();
+          } else {
+            return LoginScreen();
+          }
+        },
+      ),
     );
   }
 }
-// test message

@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quick_card/entity/card.dart' as qc;
+import 'package:quick_card/entity/card.dart' as c;
 
 class CardTile extends StatelessWidget {
-  final qc.Card card;
+  final c.Card card;
   final Function(BuildContext)? deleteFunction;
   final VoidCallback onTap;
 
