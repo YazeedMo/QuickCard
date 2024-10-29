@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:barcode/barcode.dart' as bc;
+import 'package:quick_card/screens/card_detail_screen.dart';
 import 'package:quick_card/util/barcode_utils.dart';
 
 class MobileScannerScreen extends StatefulWidget {
@@ -31,6 +32,19 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
   void dispose() {
     mobileScannerController?.dispose();
     super.dispose();
+  }
+
+  Future<void> _addNewCard() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CardDetailScreen(
+          barcodeData: barcodeData!,
+          barcodeFormat: barcodeFormat!,
+          barcodeType: barcodeType!))
+    );
+    if (result == true) {
+      Navigator.pop(context, true);
+    }
   }
 
   @override
@@ -66,10 +80,7 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
                     // Pop the screen and pass the scanned barcode back to the main screen
                   }
                 });
-                Navigator.pop(context, {
-                  'data': barcodeData,
-                  'format': barcodeType,
-                });
+                _addNewCard();
               },
             )
           : Center(

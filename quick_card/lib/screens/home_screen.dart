@@ -112,25 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(builder: (context) => MobileScannerScreen()),
     );
-
-    if (result != null && result is Map<String, dynamic>) {
-      String barcodeData = result['data'];
-      bc.Barcode barcodeFormat = result['format'];
-
-      Session? currentSession = await _sessionService.getCurrentSession();
-      int? currentUserId = currentSession?.currentUser;
-      if (currentUserId != null) {
-        List<Folder> userFolders = await _folderService.getFoldersByUserId(currentUserId);
-        c.Card newCard = c.Card(
-          name: 'Card Name',
-          data: barcodeData,
-          barcodeFormat: barcodeFormat.toString(),
-          svg: barcodeFormat.toSvg(barcodeData, width: 300, height: 100),
-          folderId: userFolders[0].id!,
-        );
-        await _cardService.createCard(newCard);
-        _loadCards(); // Reload cards to reflect the new addition
-      }
+    if (result == true) {
+      _loadCards();
     }
   }
 }
