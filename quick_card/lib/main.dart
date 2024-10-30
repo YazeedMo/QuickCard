@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
 
   Future<bool> _initializeAndCheckStayLoggedIn() async {
     // Simulating a longer loading time for testing
-    await Future.delayed(Duration(seconds: 2));
     // Initialize session if needed
     Session session = await _sessionService.initializeSessionIfNeeded();
     // Return the stayLoggedIn status from the session
