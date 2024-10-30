@@ -131,223 +131,211 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: Stack(
-      children: [
-        Container(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-        // Profile photo at the top
-        Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: ClipOval(
-          child: Image.asset(
-            'assets/holographic.jpeg', // Replace with your image path
-            width: 150.0,
-            height: 100.0,
-            opacity: const AlwaysStoppedAnimation(.6),
-
-            fit: BoxFit.cover,
+      resizeToAvoidBottomInset: true, // Automatically adjusts for the keyboard
+      body: SafeArea(
+        child: SingleChildScrollView( // Makes the view scrollable
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // Profile photo at the top
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/holographic.jpeg', // Replace with your image path
+                      width: 150.0,
+                      height: 100.0,
+                      opacity: const AlwaysStoppedAnimation(.6),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Text(
+                          'register',
+                          style: TextStyle(
+                            fontSize: 52.0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8.0), // Spacing between the labels
+                        Text(
+                          'create your account',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        // Error message (initially invisible)
+                        Visibility(
+                          visible: errorMessage.isNotEmpty,
+                          child: Text(
+                            errorMessage,
+                            style: TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        // Username input field
+                        TextField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/user.png',
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                            labelText: 'username',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFDEDCFB),
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        // Email input field
+                        TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/mail.png',
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                            labelText: 'email address',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFDEDCFB),
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        // Password input field
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/lock.png',
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                            labelText: 'password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFDEDCFB),
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        // Confirm password input field
+                        TextField(
+                          controller: _confirmPasswordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/lock.png',
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                            labelText: 'confirm password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFDEDCFB),
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        // Stay logged in checkbox
+                        CheckboxListTile(
+                          title: Text("stay logged in"),
+                          value: _stayLoggedIn,
+                          onChanged: (value) {
+                            setState(() {
+                              _stayLoggedIn = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        SizedBox(height: 50.0),
+                        // Register button
+                        ElevatedButton(
+                          onPressed: () {
+                            _handleRegistration();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xff8EE4DF), // Background color
+                            foregroundColor: Colors.black, // Text color
+                          ),
+                          child: Text(
+                            'register',
+                            style: TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text.rich(
+                              TextSpan(
+                                text: 'already have an account? ',
+                                children: [
+                                  TextSpan(
+                                    text: 'login', // Bold text
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    'register',
-                    style: TextStyle(
-                      fontSize: 52.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 8.0), // Spacing between the labels
-                  Text(
-                    'create your account',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  // Error message (initially invisible)
-                  Visibility(
-                    visible: errorMessage.isNotEmpty,
-                    child: Text(
-                      errorMessage,
-                      style: TextStyle(color: Colors.red),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Username input field
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        //Inserted image in textfield
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/user.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ),
-                      labelText: 'username',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFDEDCFB),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Email input field
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        //Inserted image in textfield
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/mail.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ),
-                      labelText: 'email address',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFDEDCFB),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Password input field
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        //Inserted image in textfield
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/lock.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ),
-                      labelText: 'password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFDEDCFB),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Confirm password input field
-                  TextField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        //Inserted image in text field
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/lock.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ),
-                      labelText: 'confirm password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFDEDCFB),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4.0,
-                  ),
-                  // Stay logged in checkbox
-                  CheckboxListTile(
-                    title: Text("stay logged in"),
-                    value: _stayLoggedIn,
-                    onChanged: (value) {
-                      setState(() {
-                        _stayLoggedIn = value ?? false;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  // Register button
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleRegistration();
-                    },
-                    style: ElevatedButton.styleFrom(
-
-                      backgroundColor: Color (0xff8EE4DF), // Background color
-                      foregroundColor: Colors.black, // Text color
-                    ),
-                    child: Text(
-                      'register',
-                      style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'already have an account? ',
-                          children: [
-                            TextSpan(
-                              text: 'login', // Bold text
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-
-                ],
-              ),
-            ),
-          )
-      ),
-      ]
-     )
-    )
-    ]
-    )
     );
   }
+
 }
+

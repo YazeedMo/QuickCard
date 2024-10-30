@@ -14,7 +14,7 @@ class SvgDisplayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 150.0,
+        toolbarHeight: 100.0,
         title: Stack(
           children: [
             Padding(padding: const EdgeInsets.only(top: 50.0),

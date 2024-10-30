@@ -54,6 +54,7 @@ class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFDEDCFB),
       body: _cards.isEmpty
           ? Center(
               child: Text(
@@ -86,10 +87,24 @@ class _CardsScreenState extends State<CardsScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewCard,
-        backgroundColor: Color(0xff8EE4DF),
-        child: const Icon(Icons.add),
+
+      floatingActionButton: SizedBox(
+        width: 150.0, // Makes the button stretch horizontally
+        child: ElevatedButton(
+          onPressed: _addNewCard,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xffa4a0f9),
+            foregroundColor: Colors.black,
+            padding: EdgeInsets.symmetric(vertical: 5), // Adjust vertical padding as needed
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30), // Rounded edges similar to FloatingActionButton
+            ),
+          ),
+          child: Text(
+            'add card',
+            style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
     );
   }

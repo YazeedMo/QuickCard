@@ -94,6 +94,7 @@ class _FolderScreenState extends State<FolderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFDEDCFB),
       body: _folders.isEmpty
           ? Center(
               child: Text(
