@@ -36,6 +36,12 @@ class CardService {
 
   }
 
+  // Update Card
+  Future<Card?> updateCard(Card card) async {
+    int updatedCardId = await cardRepository.updateCard(card);
+    return getCardById(updatedCardId);
+  }
+
   // Delete card by id
   Future<int> deleteCardById(int id) async {
     return await cardRepository.deleteCardById(id);

@@ -3,24 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/card_tile.dart';
 import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/screens/mobile_scanner_screen.dart';
 import 'package:quick_card/screens/svg_display_screen.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
-import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/entity/card.dart' as c;
 
-class CardsScreen extends StatefulWidget {
-  const CardsScreen({super.key});
+class FolderCardsScreen extends StatefulWidget {
+  final Folder folder;
+
+  const FolderCardsScreen({super.key, required this.folder});
 
   @override
-  State<CardsScreen> createState() => _CardsScreenState();
+  State<FolderCardsScreen> createState() => _FolderCardsScreenState();
 }
 
-class _CardsScreenState extends State<CardsScreen> {
-  String message = 'No code scanned yet';
-  final SessionService _sessionService = SessionService();
+class _FolderCardsScreenState extends State<FolderCardsScreen> {
+  String message = 'No cards in this folder';
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
   List<dynamic> _cards = [];
@@ -32,15 +29,7 @@ class _CardsScreenState extends State<CardsScreen> {
   }
 
   Future<void> _loadCards() async {
-    Session? currentSession = await _sessionService.getCurrentSession();
-    int? currentUserId = currentSession!.currentUser;
-    List<Folder> allUserFolders =
-        await _folderService.getFoldersByUserId(currentUserId!);
-    List<c.Card> allCards = [];
-    for (Folder folder in allUserFolders) {
-      List<c.Card> allFolderCards = await _cardService.getAllCardsByFolderId(folder.id!);
-      allCards.addAll(allFolderCards);
-    }
+    List allCards = await _cardService.getAllCardsByFolderId(widget.folder.id!);
     setState(() {
       _cards = allCards;
     });
@@ -54,6 +43,9 @@ class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Folder: ${widget.folder.name} '),
+      ),
       body: _cards.isEmpty
           ? Center(
               child: Text(
@@ -86,21 +78,6 @@ class _CardsScreenState extends State<CardsScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewCard,
-        backgroundColor: Color(0xff8EE4DF),
-        child: const Icon(Icons.add),
-      ),
     );
-  }
-
-  Future<void> _addNewCard() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MobileScannerScreen()),
-    );
-    if (result == true) {
-      _loadCards();
-    }
   }
 }

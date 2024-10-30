@@ -6,17 +6,20 @@ class FolderTile extends StatelessWidget {
   final String folderName;
   final String? imagePath; // Image path of the latest card in the folder (optional)
   final VoidCallback onTap;
+  final Function(BuildContext)? deleteFunction;
 
   const FolderTile({
     required this.folderName,
     this.imagePath,
     required this.onTap,
+    required this.deleteFunction
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // Trigger the onTap function when tapped
+      onTap: onTap,
+      onLongPress: () => _showDeleteConfirmationDialog(context, folderName),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: const EdgeInsets.all(8.0),
@@ -44,7 +47,7 @@ class FolderTile extends StatelessWidget {
                 image: DecorationImage(
                   image: imagePath != null
                       ? AssetImage(imagePath!)
-                      : AssetImage('assets/default_folder.png'), // Placeholder default image
+                      : AssetImage('assets/default_folder_image.png'), // Placeholder default image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -66,4 +69,49 @@ class FolderTile extends StatelessWidget {
       ),
     );
   }
+
+  void _showDeleteConfirmationDialog(BuildContext context, String folderName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // Determine the appropriate dialog to show
+        if (folderName == 'default') {
+          return AlertDialog(
+            title: Text('Default Folder'),
+            content: Text('You cannot delete the default folder.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(), // Close dialog
+                child: Text('OK'),
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: Text('Delete Folder'),
+            content: Text('Are you sure you want to delete this folder?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(), // Close dialog
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (deleteFunction != null) {
+                    deleteFunction!(context); // Call delete function
+                  }
+                  Navigator.of(context).pop(); // Close dialog
+                },
+                child: Text('Delete'),
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+
 }
+
+

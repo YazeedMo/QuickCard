@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:quick_card/data/folder_repository.dart';
@@ -20,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   String errorMessage = '';
   bool _stayLoggedIn = true;
 
@@ -36,6 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String username = _usernameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
 
     // Clear any previous error messages
     setState(() {
@@ -43,13 +45,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     });
 
     // Validate user input
-    if (_validateInputs(username, email, password)) return;
+    if (_validateInputs(username, email, password, confirmPassword)) return;
 
     User user = User(username: username, email: email, password: password);
     await _registerUser(user);
   }
 
-  bool _validateInputs(String username, String email, String password) {
+  bool _validateInputs(
+      String username, String email, String password, String confirmPassword) {
     if (username.isEmpty) {
       setState(() {
         errorMessage = "Please enter username";
@@ -65,6 +68,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (password.isEmpty) {
       setState(() {
         errorMessage = "Please enter password";
+      });
+      return true;
+    }
+    if (confirmPassword.isEmpty) {
+      setState(() {
+        errorMessage = "Please confirm password";
+      });
+      return true;
+    }
+    if (password != confirmPassword) {
+      setState(() {
+        errorMessage = "Ensure passwords are the same";
       });
       return true;
     }
@@ -109,65 +124,200 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                // Error message (initially invisible)
-                Visibility(
-                  visible: errorMessage.isNotEmpty,
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(color: Colors.red),
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    'REGISTER',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(height: 16.0),
-                // Username input field
-                _buildTextField(_usernameController, 'Username'),
-                SizedBox(height: 16.0),
-                // Email input field
-                _buildTextField(_emailController, 'Email'),
-                SizedBox(height: 16.0),
-                // Password input field
-                _buildTextField(_passwordController, 'Password', obscureText: true),
-                SizedBox(height: 10.0),
-                // Stay logged in checkbox
-                CheckboxListTile(
-                  title: Text("Stay logged in"),
-                  value: _stayLoggedIn,
-                  onChanged: (value) {
-                    setState(() {
-                      _stayLoggedIn = value ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                SizedBox(height: 10.0,),
-                // Register button
-                ElevatedButton(
-                  onPressed: _handleRegistration,
-                  child: Text('Register'),
-                ),
-              ],
-            ),
-          ),
-        )
-      ),
-    );
-  }
+                  SizedBox(height: 8.0), // Spacing between the labels
+                  Text(
+                    'Create your account',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[700],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // Error message (initially invisible)
+                  Visibility(
+                    visible: errorMessage.isNotEmpty,
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  // Username input field
+                  TextField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/user.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'username',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  // Email input field
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/mail.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'email address',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  // Password input field
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/lock.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'password',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  // Confirm password input field
+                  TextField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in text field
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/lock.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'confirm password',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  // Stay logged in checkbox
+                  CheckboxListTile(
+                    title: Text("Stay logged in"),
+                    value: _stayLoggedIn,
+                    onChanged: (value) {
+                      setState(() {
+                        _stayLoggedIn = value ?? false;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  // Register button
+                  ElevatedButton(
+                    onPressed: () {
+                      _handleRegistration();
+                    },
+                    style: ElevatedButton.styleFrom(
 
-  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(),
-      ),
+                      backgroundColor: Color (0xff8EE4DF), // Background color
+                      foregroundColor: Colors.black, // Text color
+                    ),
+                    child: Text(
+                      'register',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'already have an account? ',
+                          children: [
+                            TextSpan(
+                              text: 'login', // Bold text
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )),
     );
   }
+  //
+  // Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
+  //   return TextField(
+  //     controller: controller,
+  //     obscureText: obscureText,
+  //     decoration: InputDecoration(
+  //       labelText: label,
+  //       border: OutlineInputBorder(),
+  //     ),
+  //   );
+  // }
 }

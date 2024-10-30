@@ -1,4 +1,4 @@
-// card_detail_screen.dart
+// card_create_screen.dart
 
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
 
@@ -17,21 +17,21 @@ import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/service/user_service.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CardDetailScreen extends StatefulWidget {
+class CardCreateScreen extends StatefulWidget {
   final String barcodeData;
   final BarcodeFormat barcodeFormat;
   final bc.Barcode barcodeType;
 
-  CardDetailScreen(
+  CardCreateScreen(
       {required this.barcodeData,
       required this.barcodeFormat,
       required this.barcodeType});
 
   @override
-  _CardDetailScreenState createState() => _CardDetailScreenState();
+  _CardCreateScreenState createState() => _CardCreateScreenState();
 }
 
-class _CardDetailScreenState extends State<CardDetailScreen> {
+class _CardCreateScreenState extends State<CardCreateScreen> {
   final UserService _userService = UserService();
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
@@ -39,8 +39,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   final ImagePicker _picker = ImagePicker();
 
   final _formKey = GlobalKey<FormState>();
-  String _cardName = '';
-  String _cardDescription = '';
+  String _cardName = 'card';
   String _cardImagePath = '';
   File? _selectedImageFile;
 
@@ -80,18 +79,6 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 },
                 onSaved: (value) {
                   _cardName = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _cardDescription = value!;
                 },
               ),
               // Image picker?
