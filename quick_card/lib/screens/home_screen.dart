@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/user.dart';
+import 'package:quick_card/screens/folder_create_screen.dart';
 import 'package:quick_card/screens/cards_screen.dart';
+import 'package:quick_card/screens/folder_screen.dart';
 import 'package:quick_card/screens/login_screen.dart';
 import 'package:quick_card/service/folder_service.dart';
 import 'package:quick_card/service/session_service.dart';
@@ -28,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     CardsScreen(),
-    BlankScreen(), // Folders screen
-    BlankScreen(), // Shopping List screen
+    FolderScreen(), // Folders screen
+    FolderScreen(), // Shopping List screen
     BlankScreen(), // Account screen
   ];
 
@@ -118,42 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.tealAccent,
+        selectedItemColor: Color(0xff382EF2),
         unselectedItemColor: Colors.black54,
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
       ),
-      // body: _cards.isEmpty
-      //     ? Center(
-      //         child: Text(
-      //           message,
-      //           style: TextStyle(fontSize: 20.0),
-      //         ),
-      //       )
-      //     : ListView.builder(
-      //         itemCount: _cards.length,
-      //         itemBuilder: (context, index) {
-      //           final card = _cards[index];
-      //           return CardTile(
-      //             card: card,
-      //             deleteFunction: (context) =>
-      //                 _deleteCard(card.id), // Pass the key to delete
-      //             onTap: () {
-      //               Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                   builder: (context) => SvgDisplayScreen(svg: card.svg),
-      //                 ),
-      //               );
-      //             },
-      //           );
-      //         },
-      //       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _addNewCard,
-      //   backgroundColor: Color(0xff8EE4DF),
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 }

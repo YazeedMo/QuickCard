@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:quick_card/data/folder_repository.dart';
@@ -30,7 +30,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -52,7 +51,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await _registerUser(user);
   }
 
-  bool _validateInputs(String username, String email, String password, String confirmPassword) {
+  bool _validateInputs(
+      String username, String email, String password, String confirmPassword) {
     if (username.isEmpty) {
       setState(() {
         errorMessage = "Please enter username";
@@ -120,152 +120,204 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          toolbarHeight: 200.0,
-          centerTitle: true,
-          title: Stack(
-              children: [
-                Positioned(
-                  left: 5,
-                  top: 25,
-                  child: ClipOval(
-                    child: Opacity(
-                      opacity: 0.9,
-                      child: Image.asset(
-                        'assets/holographic.jpeg',
-                        width: 1,
-                        height: 1,
-                        fit: BoxFit.cover, // Ensures the image fills the oval shape
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Text(
-                    'register',
-                    style: TextStyle(fontSize: 50.0,),
-                  ),
-                ),
-              ]
-          )
-
-
+        title: Text('QuickCard Registration'),
+        centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 100.0,
-            left: 16.0, right: 16.0
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text('create your account', textAlign: TextAlign.center,),
-                // Error message (initially invisible)
-                Visibility(
-                  visible: errorMessage.isNotEmpty,
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(color: Colors.red),
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    'REGISTER',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                ),
-
-                /*ClipOval(
-              child: Opacity(
-                opacity: 0.9,
-                child: Image.asset(
-                  'assets/holographic.jpeg',
-                  width: 5,
-                  height: 15,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
-            ),*/
-
-                SizedBox(height: 16.0),
-                // Username input field
-                _buildTextField(_usernameController, 'username'),
-                SizedBox(height: 16.0),
-                // Email input field
-                _buildTextField(_emailController, 'email'),
-                SizedBox(height: 16.0),
-                // Password input field
-                _buildTextField(_passwordController, 'password', obscureText: true),
-                SizedBox(height: 16.0),
-                // Confirm Password input field
-                _buildTextField(_confirmPasswordController, 'confirm password'),
-                SizedBox(height: 10.0),
-                // Stay logged in checkbox
-                CheckboxListTile(
-                  title: Text("Stay logged in"),
-                  value: _stayLoggedIn,
-                  onChanged: (value) {
-                    setState(() {
-                      _stayLoggedIn = value ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                SizedBox(height: 64.0,),
-                // Register button
-                ElevatedButton(
-                  onPressed: _handleRegistration,
-                  style: ElevatedButton.styleFrom(
-
-                    backgroundColor: Color (0xff8EE4DF), // Background color
-                    foregroundColor: Colors.black, // Text color
-                  ),
-                  child: Text(
-                    'register',
+                  SizedBox(height: 8.0), // Spacing between the labels
+                  Text(
+                    'Create your account',
                     style: TextStyle(
-                        fontSize: 24.0, fontWeight: FontWeight.bold
+                      fontSize: 18,
+                      color: Colors.grey[700],
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      );
-                    },
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'already have an account? ',
-                        children: [
-                          TextSpan(
-                            text: 'login', // Bold text
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                  // Error message (initially invisible)
+                  Visibility(
+                    visible: errorMessage.isNotEmpty,
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(color: Colors.red),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                )
-              ],
-            ),
-          ),
-        )
-      ),
-    );
-  }
+                  SizedBox(height: 16.0),
+                  // Username input field
+                  TextField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/user.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'username',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  // Email input field
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/mail.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'email address',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  // Password input field
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in textfield
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/lock.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'password',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  // Confirm password input field
+                  TextField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        //Inserted image in text field
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          'assets/lock.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                      ),
+                      labelText: 'confirm password',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFDEDCFB),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  // Stay logged in checkbox
+                  CheckboxListTile(
+                    title: Text("Stay logged in"),
+                    value: _stayLoggedIn,
+                    onChanged: (value) {
+                      setState(() {
+                        _stayLoggedIn = value ?? false;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  // Register button
+                  ElevatedButton(
+                    onPressed: () {
+                      _handleRegistration();
+                    },
+                    style: ElevatedButton.styleFrom(
 
-  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(),
-      ),
+                      backgroundColor: Color (0xff8EE4DF), // Background color
+                      foregroundColor: Colors.black, // Text color
+                    ),
+                    child: Text(
+                      'register',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'already have an account? ',
+                          children: [
+                            TextSpan(
+                              text: 'login', // Bold text
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )),
     );
   }
+  //
+  // Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
+  //   return TextField(
+  //     controller: controller,
+  //     obscureText: obscureText,
+  //     decoration: InputDecoration(
+  //       labelText: label,
+  //       border: OutlineInputBorder(),
+  //     ),
+  //   );
+  // }
 }

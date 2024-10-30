@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:barcode/barcode.dart' as bc;
-import 'package:quick_card/screens/card_detail_screen.dart';
+import 'package:quick_card/screens/card_create_screen.dart';
 import 'package:quick_card/util/barcode_utils.dart';
 
 class MobileScannerScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
   Future<void> _addNewCard() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CardDetailScreen(
+      MaterialPageRoute(builder: (context) => CardCreateScreen(
           barcodeData: barcodeData!,
           barcodeFormat: barcodeFormat!,
           barcodeType: barcodeType!))
