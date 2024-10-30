@@ -135,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: ImageIcon(
@@ -144,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
-              AssetImage("assets/folder.png"),
+              AssetImage("assets/selected-folder.png"),
             ),
             label: 'folders',
           ),
@@ -156,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
-              AssetImage("assets/user.png"),
+              AssetImage("assets/user-selected.png"),
             ),
             label: 'account',
           ),
@@ -165,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Color(0xff000000),
         unselectedItemColor: Colors.black54,
         backgroundColor: Color(0xFFDEDCFB),
+
         onTap: _onItemTapped,
       ),
     );
