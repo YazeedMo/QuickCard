@@ -1,26 +1,34 @@
-import 'package:hive/hive.dart';
-part 'user.g.dart';
-
-@HiveType(typeId: 0)
 class User {
-
-  @HiveField(0)
+  int? id;
   String username;
-
-  @HiveField(1)
   String email;
-
-  @HiveField(2)
   String password;
 
   User({
+    this.id,
     required this.username,
     required this.email,
     required this.password
-});
+  });
 
-  @override
-  String toString() {
-    return 'User{username: $username, email: $email, password: $password}';
+  // Convert a User object into a map for the database
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'username': username,
+      'email': email,
+      'password': password,
+    };
   }
+
+  // Convert a map from the database back into a User object
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      username: map['username'],
+      email: map['email'],
+      password: map['password'],
+    );
+  }
+
 }

@@ -1,26 +1,50 @@
-import '../data/card_db.dart';
-import '../entity/card.dart';
+import 'package:quick_card/data/card_repository.dart';
+import 'package:quick_card/entity/card.dart';
+
 
 class CardService {
-  final CardDB _cardDB = CardDB();
 
-  Future<int> saveCard(Card card) async {
-    return await _cardDB.saveCard(card);
+  final CardRepository cardRepository = CardRepository();
+
+  // Create a new Card
+  Future<int> createCard(Card card) async {
+
+    return await cardRepository.createCard(card);
+
   }
 
-  Card? getCard(int key) {
-    return _cardDB.getCard(key);
+  // Get all cards
+  Future<List> getAllCards() async {
+    return cardRepository.getAllCards();
   }
 
-  List<Card> getAllCards() {
-    return _cardDB.getAllCards();
+  // Get all cards by Folder id
+  Future<List<Card>> getAllCardsByFolderId(int id) async {
+    return await cardRepository.getCardsByFolderId(id);
   }
 
-  Future<void> deleteCardByIndex(int index) async {
-    await _cardDB.deleteCardByIndex(index);
+  // Get card by id
+  Future<Card?> getCardById(int id) async {
+
+    Card? card = await cardRepository.getCardById(id);
+
+    if (card != null) {
+      return card;
+    }
+
+    return null;
+
   }
 
-  Future<void> close() async {
-    await _cardDB.closeBox();
+  // Update Card
+  Future<Card?> updateCard(Card card) async {
+    int updatedCardId = await cardRepository.updateCard(card);
+    return getCardById(updatedCardId);
   }
+
+  // Delete card by id
+  Future<int> deleteCardById(int id) async {
+    return await cardRepository.deleteCardById(id);
+  }
+
 }

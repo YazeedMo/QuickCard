@@ -1,13 +1,17 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:quick_card/screens/mobile_scanner_screen.dart';
-import 'package:quick_card/screens/svg_display_screen.dart';
-
-import '../components/card_tile.dart';
-import '../service/card_service.dart';
-import 'package:quick_card/entity/card.dart' as qc;
-import 'package:barcode/src/barcode.dart' as bc;
+import 'package:quick_card/entity/folder.dart';
+import 'package:quick_card/entity/session.dart';
+import 'package:quick_card/entity/user.dart';
+import 'package:quick_card/screens/folder_create_screen.dart';
+import 'package:quick_card/screens/cards_screen.dart';
+import 'package:quick_card/screens/folder_screen.dart';
+import 'package:quick_card/screens/login_screen.dart';
+import 'package:quick_card/service/folder_service.dart';
+import 'package:quick_card/service/session_service.dart';
+import 'package:quick_card/service/card_service.dart';
+import 'package:quick_card/service/user_service.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,11 +19,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String title = '';
   String message = 'No code scanned yet';
+  final SessionService _sessionService = SessionService();
+  final UserService _userService = UserService();
+  final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
-  List<qc.Card> _cards = [];
-  List<int> _keys = [];
+  List<dynamic> _cards = [];
+  int _selectedIndex = 0;
 
+  final List<Widget> _screens = [
+    CardsScreen(),
+    FolderScreen(), // Folders screen
+    FolderScreen(), // Shopping List screen
+    BlankScreen(), // Account screen
+  ];
+
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        title = "All Cards";
+        break;
+      case 1:
+        title = "Folders";
+        break;
+      case 2:
+        title = "Shopping List";
+        break;
+      case 3:
+        title = "Account";
+        break;
+    }
+    setState(() {
+      title;
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -28,97 +63,85 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadCards() async {
-    final allCards = _cardService.getAllCards();
+    Session? currentSession = await _sessionService.getCurrentSession();
+    int? currentUserId = currentSession!.currentUser;
+    User? user = await _userService.getUserById(currentUserId!);
+    List allUserFolders =
+        await _folderService.getFoldersByUserId(currentUserId);
+    Folder userDefaultFolder =
+        allUserFolders.firstWhere((folder) => folder.name == 'default');
+    List allCards =
+        await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
     setState(() {
+      title = '${user!.username}\'s Cards';
       _cards = allCards;
-      _keys = List.generate(allCards.length, (index) => index); // Store keys based on index
     });
   }
 
-  void _deleteCard(int index) async {
-    await _cardService.deleteCardByIndex(index); // Delete from the database
-
-    // After deletion, refresh the list of cards
-    setState(() {
-      // Remove card by finding the index of the key
-      int indexToRemove = _keys.indexOf(index);
-      if (indexToRemove != -1) {
-        _cards.removeAt(indexToRemove); // Remove card from the list
-        _keys.removeAt(indexToRemove); // Remove the corresponding key
-      }
-    });
+  void _logout() async {
+    // Handle logout logic
+    await _sessionService.clearSession();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (route) => false, // This will remove all routes before the LoginScreen
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Loyalty Cards')),
-      body: _cards.isEmpty ?
-          Center(
-            child: Text(
-              message,
-              style: TextStyle(fontSize: 20.0),
-            ),
-          )
-      :
-      ListView.builder(
-        itemCount: _cards.length,
-        itemBuilder: (context, index) {
-          final card = _cards[index];
-          final key = _keys[index]; // Get the corresponding key
-          return CardTile(
-            card: card,
-            deleteFunction: (context) => _deleteCard(key), // Pass the key to delete
-            onTap: () {
-              Navigator.push(
-                context,
-              MaterialPageRoute(builder: (context) => SvgDisplayScreen(svg: card.svg)));
-            },
-          );
-        },
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _logout, // Trigger logout on button press
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _addNewCard(); // Implement this function to handle adding a new card
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Color(0xff8EE4DF),
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.credit_card),
+            label: 'Cards',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.folder),
+            label: 'Folders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Shopping List',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Account',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xff382EF2),
+        unselectedItemColor: Colors.black54,
+        backgroundColor: Colors.white,
+        onTap: _onItemTapped,
       ),
     );
   }
+}
 
-  Future<void> _addNewCard() async {
-
-    final result = await Navigator.push(
-        context,
-    MaterialPageRoute(builder: (context) => MobileScannerScreen()));
-
-    if (result != null && result is Map<String, dynamic>) {
-
-      String barcodeData = result['data'];
-      bc.Barcode barcodeFormat = result['format'];
-
-      qc.Card newCard = qc.Card(
-        name: 'Card Name',
-        data: barcodeData,
-        barcodeFormat: barcodeFormat.toString(),
-        svg: barcodeFormat.toSvg(barcodeData, width: 300, height: 100),
-      );
-
-
-      // Save the new card and get the autogenerated key
-      int key = await _cardService.saveCard(newCard);
-      setState(() {
-        _loadCards(); // Reload cards to reflect the new addition
-      });
-
-    }
-
-  }
-
+// Blank screen widget for other tabs
+class BlankScreen extends StatelessWidget {
   @override
-  void dispose() {
-    _cardService.close();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Text(
+          'Blank Screen',
+          style: TextStyle(fontSize: 24, color: Colors.grey),
+        ),
+      ),
+    );
   }
 }
