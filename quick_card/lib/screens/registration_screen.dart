@@ -116,14 +116,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
+  /*ClipOval(
+              child: Opacity(
+                opacity: 0.9,
+                child: Image.asset(
+                  'assets/holographic.jpeg',
+                  width: 5,
+                  height: 15,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('QuickCard Registration'),
-        centerTitle: true,
+
+      body: Stack(
+      children: [
+        Container(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+        // Profile photo at the top
+        Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: ClipOval(
+          child: Image.asset(
+            'assets/holographic.jpeg', // Replace with your image path
+            width: 150.0,
+            height: 100.0,
+            opacity: const AlwaysStoppedAnimation(.6),
+
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      body: Padding(
+      Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: SingleChildScrollView(
@@ -132,19 +163,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'REGISTER',
+                    'register',
                     style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 52.0,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0), // Spacing between the labels
                   Text(
-                    'Create your account',
+                    'create your account',
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[700],
+                      fontSize: 18.0,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -173,6 +203,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       labelText: 'username',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -195,6 +226,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       labelText: 'email address',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -218,13 +250,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       labelText: 'password',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
                       fillColor: Color(0xFFDEDCFB),
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 16.0),
                   // Confirm password input field
                   TextField(
                     controller: _confirmPasswordController,
@@ -241,6 +274,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       labelText: 'confirm password',
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -248,11 +282,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 16.0,
+                    height: 4.0,
                   ),
                   // Stay logged in checkbox
                   CheckboxListTile(
-                    title: Text("Stay logged in"),
+                    title: Text("stay logged in"),
                     value: _stayLoggedIn,
                     onChanged: (value) {
                       setState(() {
@@ -262,7 +296,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     controlAffinity: ListTileControlAffinity.leading,
                   ),
                   SizedBox(
-                    height: 10.0,
+                    height: 50.0,
                   ),
                   // Register button
                   ElevatedButton(
@@ -303,21 +337,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ),
                   )
+
                 ],
               ),
             ),
-          )),
+          )
+      ),
+      ]
+     )
+    )
+    ]
+    )
     );
   }
-  //
-  // Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
-  //   return TextField(
-  //     controller: controller,
-  //     obscureText: obscureText,
-  //     decoration: InputDecoration(
-  //       labelText: label,
-  //       border: OutlineInputBorder(),
-  //     ),
-  //   );
-  // }
 }
