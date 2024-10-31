@@ -10,6 +10,7 @@ import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quick_card/util/card_utils.dart';
 
 class CardCreateScreen extends StatefulWidget {
   final String barcodeData;
@@ -35,10 +36,15 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
   String _cardImagePath = '';
   File? _selectedImageFile;
 
+  final TextEditingController _cardNameController = TextEditingController(text: 'card');
+
+
+  List<Map<String, String>> premadeIcons = CardUtils().premadeIcons;
+
   // Function to pick image from gallery
   Future<void> _pickImage() async {
     final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+    await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedImageFile = File(pickedFile.path);
@@ -47,9 +53,37 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
     }
   }
 
+  void _showPremadeIcons() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView.builder(
+          itemCount: premadeIcons.length,
+          itemBuilder: (context, index) {
+            final icon = premadeIcons[index];
+            return ListTile(
+              leading: Image.asset(icon['assetPath']!, width: 40, height: 40),
+              title: Text(icon['name']!),
+              onTap: () {
+                setState(() {
+                  _cardImagePath = icon['assetPath']!;
+                  _cardName = icon['name']!;
+                  _selectedImageFile = null; // Clear custom image if premade is chosen
+                  _cardNameController.text = _cardName; // Update controller text
+                });
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+
   void _createNewCard() async {
     Folder userDefaultFolder =
-        await _folderService.getCurrentUserDefaultFolder();
+    await _folderService.getCurrentUserDefaultFolder();
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -78,15 +112,16 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
         child: Center(
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Centers the content vertically
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, // Centers the content horizontally
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TextFormField(
+                  controller: _cardNameController, // Set the controller here
                   decoration: InputDecoration(labelText: 'Card Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -98,13 +133,19 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
                     _cardName = value!;
                   },
                 ),
+
                 SizedBox(height: 16),
-                // Image picker with button always visible
                 if (_selectedImageFile != null)
-                  Image.file(_selectedImageFile!, height: 150),
+                  Image.file(_selectedImageFile!, height: 150)
+                else if (_cardImagePath.isNotEmpty)
+                  Image.asset(_cardImagePath, height: 150),
                 ElevatedButton(
                   onPressed: _pickImage,
                   child: Text('Pick Image from Gallery'),
+                ),
+                ElevatedButton(
+                  onPressed: _showPremadeIcons,
+                  child: Text('Choose from Premade Icons'),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -116,6 +157,14 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
           ),
         ),
       ),
+      ),
     );
   }
+
+  @override
+  void dispose() {
+    _cardNameController.dispose();
+    super.dispose();
+  }
+
 }

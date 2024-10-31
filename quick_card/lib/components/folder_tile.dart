@@ -25,7 +25,7 @@ class FolderTile extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Color(0xFF574DF2),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
@@ -63,13 +63,15 @@ class FolderTile extends StatelessWidget {
             SizedBox(width: 16), // Space between image and folder name
             // Folder name text
             Expanded(
+              child: Center(
               child: Text(
                 folder.name,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
+              ),
               ),
             ),
           ],

@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/card_tile.dart';
+import 'package:quick_card/components/add_button.dart';
 import 'package:quick_card/screens/card_scanner_screen.dart';
 import 'package:quick_card/screens/svg_display_screen.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/entity/card.dart' as c;
+
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -93,24 +95,7 @@ class _CardsScreenState extends State<CardsScreen> {
                     );
                   },
                 ),
-      floatingActionButton: SizedBox(
-        width: 150.0,
-        child: ElevatedButton(
-          onPressed: _goToCardScanner,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xffa4a0f9),
-            foregroundColor: Colors.black,
-            padding: EdgeInsets.symmetric(vertical: 5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-          child: Text(
-            'add card',
-            style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
+      floatingActionButton: AddButton(buttonText: 'add card',onPressed: _goToCardScanner)
     );
   }
 }

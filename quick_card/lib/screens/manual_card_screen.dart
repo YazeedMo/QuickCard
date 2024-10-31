@@ -8,6 +8,7 @@ import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quick_card/service/folder_service.dart';
+import 'package:quick_card/util/card_utils.dart';
 
 class ManualCardScreen extends StatefulWidget {
   @override
@@ -24,8 +25,11 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
   String _cardImagePath = '';
   File? _selectedImageFile;
 
+  final TextEditingController _cardNameController = TextEditingController();
+
+  List<Map<String, String>> premadeIcons = CardUtils().premadeIcons;
+
   // Default barcode formats
-  final List<String> _barcodeFormats = ['QR', 'EAN', 'Code 39'];
   String _selectedFormat = 'Code 128'; // Default selection
 
   // Function to pick image from gallery
@@ -68,6 +72,34 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
     }
   }
 
+  void _showPremadeIcons() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView.builder(
+          itemCount: premadeIcons.length,
+          itemBuilder: (context, index) {
+            final icon = premadeIcons[index];
+            return ListTile(
+              leading: Image.asset(icon['assetPath']!, width: 40, height: 40),
+              title: Text(icon['name']!),
+              onTap: () {
+                setState(() {
+                  _cardImagePath = icon['assetPath']!;
+                  _cardName = icon['name']!;
+                  _selectedImageFile = null; // Clear custom image if premade is chosen
+                  _cardNameController.text = _cardName; // Update controller text
+                });
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +108,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
         child: Center(
           child: Form(
             key: _formKey,
@@ -84,6 +117,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
               crossAxisAlignment: CrossAxisAlignment.center, // Centers the content horizontally
               children: [
                 TextFormField(
+                  controller: _cardNameController, // Set the controller here
                   decoration: InputDecoration(labelText: 'Card Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -95,6 +129,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                     _cardName = value!;
                   },
                 ),
+
                 SizedBox(height: 16),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Manual Code'),
@@ -109,12 +144,18 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                   },
                 ),
                 SizedBox(height: 16),
-                // Image picker with button always visible
                 if (_selectedImageFile != null)
-                  Image.file(_selectedImageFile!, height: 150),
+                  Image.file(_selectedImageFile!, height: 150)
+                else if (_cardImagePath.isNotEmpty)
+                  Image.asset(_cardImagePath, height: 150),
                 ElevatedButton(
                   onPressed: _pickImage,
                   child: Text('Pick Image from Gallery'),
+                ),
+                // New button to show premade icons
+                ElevatedButton(
+                  onPressed: _showPremadeIcons,
+                  child: Text('Choose from Premade Icons'),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -126,6 +167,15 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
           ),
         ),
       ),
+      ),
     );
   }
+
+  @override
+  void dispose() {
+    _cardNameController.dispose();
+    super.dispose();
+  }
+
+
 }
