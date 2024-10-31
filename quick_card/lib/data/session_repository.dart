@@ -4,7 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class SessionRepository {
-  // Insert a new session into the database
+
+  // Create new Session
   Future<int> createSession(Session session) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
@@ -14,7 +15,7 @@ class SessionRepository {
     );
   }
 
-  // Retrieve Session by id
+  // Get Session by id
   Future<Session?> getSessionById(int id) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -28,7 +29,7 @@ class SessionRepository {
     return null;
   }
 
-  // Retrieve the current session
+  // Get current Session
   Future<Session?> getCurrentSession() async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -42,7 +43,7 @@ class SessionRepository {
     return null;
   }
 
-  // Update a session
+  // Update Session
   Future<int> updateSession(Session session) async {
     final db = await DatabaseProvider().database;
     return await db.update(
@@ -53,7 +54,7 @@ class SessionRepository {
     );
   }
 
-  // Delete the session
+  // Delete Session
   Future<int> deleteSession(int id) async {
     final db = await DatabaseProvider().database;
     return await db.delete(

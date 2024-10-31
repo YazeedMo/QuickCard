@@ -4,7 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class FolderRepository {
-  // Insert a new folder into the database
+
+  // Create new Folder
   Future<int> createFolder(Folder folder) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
@@ -14,12 +15,21 @@ class FolderRepository {
     );
   }
 
-  // import 'dart:io';
-  //
-  // Image.file(File(folder.imagePath ?? 'default_image_path_here'));
+  // Get Folder by Id
+  Future<Folder?> getFolderById(int id) async {
+    final db = await DatabaseProvider().database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      FolderTable.tableName,
+      where: '${FolderTable.columnId} = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return Folder.fromMap(maps.first);
+    }
+    return null;
+  }
 
-
-  // Retrieve all folders for a specific user
+  // Get all Folders by User id
   Future<List<Folder>> getFoldersByUserId(int userId) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -30,7 +40,7 @@ class FolderRepository {
     return List.generate(maps.length, (i) => Folder.fromMap(maps[i]));
   }
 
-  // Update a folder
+  // Update Folder
   Future<int> updateFolder(Folder folder) async {
     final db = await DatabaseProvider().database;
     return await db.update(
@@ -41,7 +51,7 @@ class FolderRepository {
     );
   }
 
-  // Delete a folder by ID
+  // Delete Folder by id
   Future<int> deleteFolder(int id) async {
     final db = await DatabaseProvider().database;
     return await db.delete(

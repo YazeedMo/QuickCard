@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:quick_card/screens/home_screen.dart';
 import 'package:quick_card/screens/registration_screen.dart';
 import 'package:quick_card/service/auth_service.dart';
-import 'package:quick_card/service/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,11 +11,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
   final AuthService _authService = AuthService();
+
   String errorMessage = '';
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _stayLoggedIn = false;
+  bool _stayLoggedIn = true;
 
   Future<void> _handleLogin() async {
     String username = _usernameController.text;
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/background.jpg'), // Add your image here
+                    image: AssetImage('assets/background.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide.none,
                         ),
                         prefixIcon: Padding(
-                          //Inserted image in textfield
+                          //Inserted image in text field
                           padding: const EdgeInsets.all(8.0),
                           child: Image.asset(
                             'assets/user.png',
@@ -147,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide.none,
                         ),
                         prefixIcon: Padding(
-                          //Inserted image in textfield
+                          //Inserted image in text field
                           padding: const EdgeInsets.all(8.0),
                           child: Image.asset(
                             'assets/lock.png',

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:barcode/barcode.dart' as bc;
 import 'package:quick_card/screens/card_create_screen.dart';
+import 'package:quick_card/screens/manual_card_screen.dart';
 import 'package:quick_card/util/barcode_utils.dart';
 
-class MobileScannerScreen extends StatefulWidget {
+class CardScannerScreen extends StatefulWidget {
   @override
-  _MobileScannerScreenState createState() => _MobileScannerScreenState();
+  State<CardScannerScreen> createState() => _CardScannerScreenState();
 }
 
-class _MobileScannerScreenState extends State<MobileScannerScreen> {
-
+class _CardScannerScreenState extends State<CardScannerScreen> {
   final BarcodeUtils _barcodeUtils = BarcodeUtils();
 
   String? barcodeData;
@@ -36,13 +36,22 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
 
   Future<void> _addNewCard() async {
     final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CardCreateScreen(
-          barcodeData: barcodeData!,
-          barcodeFormat: barcodeFormat!,
-          barcodeType: barcodeType!))
-    );
-    if (result == true) {
+        context,
+        MaterialPageRoute(
+            builder: (context) => CardCreateScreen(
+                barcodeData: barcodeData!,
+                barcodeFormat: barcodeFormat!,
+                barcodeType: barcodeType!)));
+    if (result == true && mounted) {
+      Navigator.pop(context, true);
+    }
+  }
+
+  Future<void> _addNewManualCard() async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ManualCardScreen()));
+
+    if (result == true && mounted) {
       Navigator.pop(context, true);
     }
   }
@@ -73,11 +82,9 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
                   barcodeFormat = barcode.format;
 
                   if (barcodeData != null) {
-                    // Stop further scanning and return the value
                     isScanning = false;
                     mobileScannerController?.dispose();
                     barcodeType = _barcodeUtils.getBarcodeType(barcodeFormat);
-                    // Pop the screen and pass the scanned barcode back to the main screen
                   }
                 });
                 _addNewCard();
@@ -89,27 +96,26 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-      bottomSheet: barcodeData != null
-          ? Container(
-              color: Colors.white,
-              height: 100,
-              child: Center(
-                child: Text(
+      bottomSheet: Container(
+        color: Colors.white,
+        height: 100,
+        child: Center(
+          child: barcodeData != null
+              ? Text(
                   'Scanned Code: $barcodeData',
                   style: TextStyle(fontSize: 18),
+                )
+              : TextButton(
+                  onPressed: () {
+                    _addNewManualCard();
+                  },
+                  child: Text(
+                    'Enter code manually instead',
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                  ),
                 ),
-              ),
-            )
-          : Container(
-              height: 100,
-              color: Colors.white,
-              child: Center(
-                child: Text(
-                  'Scan a code',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-            ),
+        ),
+      ),
     );
   }
 }

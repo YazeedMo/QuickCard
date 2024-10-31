@@ -1,19 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:quick_card/entity/card.dart' as c;
 
 class CardFolderEdit extends StatelessWidget {
   final c.Card card;
-  final bool isSelected; // Indicates whether the card is selected
-  final ValueChanged<bool?> onSelected; // Callback for when the checkbox is toggled
+  final bool isSelected;
+  final ValueChanged<bool?> onSelected;
 
   const CardFolderEdit({
-    Key? key,
+    super.key,
     required this.card,
-    this.isSelected = false, // Default to false if not provided
-    required this.onSelected, // Callback for checkbox state change
-  }) : super(key: key);
+    this.isSelected = false,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +30,11 @@ class CardFolderEdit extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
-        width: tileWidth, // Adjust width as needed
-        height: tileHeight, // Adjust height as needed
+        width: tileWidth,
+        height: tileHeight,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xff382EF2), Color(0xff8EE4DF)],
+            colors: const [Color(0xff382EF2), Color(0xff8EE4DF)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -87,13 +89,16 @@ class CardFolderEdit extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
-                child: Image.asset(
-                  card.imagePath?.isNotEmpty == true
-                      ? card.imagePath!
-                      : 'assets/default_card_image.jpg',
+                child: card.imagePath != null &&
+                    card.imagePath!.isNotEmpty &&
+                    File(card.imagePath!).existsSync()
+                    ? Image.file(
+                  File(card.imagePath!),
                   fit: BoxFit.contain,
-                  width: 60,
-                  height: 60,
+                )
+                    : Image.asset(
+                  'assets/default_card_image.jpg', // Replace with your asset path
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
