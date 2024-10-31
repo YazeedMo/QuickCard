@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quick_card/components/add_button.dart';
 import 'package:quick_card/components/folder_tile.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/screens/folder_cards_screen.dart';
@@ -104,11 +105,8 @@ class _FolderScreenState extends State<FolderScreen> {
                         });
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {showCreateFolderModal(context)},
-        backgroundColor: Color(0xff8EE4DF),
-        child: Icon(Icons.add),
-      ),
+
+    floatingActionButton: AddButton(buttonText: 'add folder',onPressed: () => {showCreateFolderModal(context)},)
     );
   }
 

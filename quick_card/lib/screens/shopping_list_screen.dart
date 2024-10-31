@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/item_tile.dart';
+import 'package:quick_card/components/add_button.dart';
 import 'package:quick_card/entity/item.dart';
 import 'package:quick_card/entity/shopping_list.dart';
 import 'package:quick_card/service/item_service.dart';
@@ -87,11 +88,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                     );
                   },
                 ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddItemDialog,
-        backgroundColor: Color(0xff8EE4DF),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: AddButton(buttonText: 'add item',onPressed: _showAddItemDialog)
     );
   }
 
