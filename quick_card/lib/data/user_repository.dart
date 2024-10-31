@@ -4,7 +4,8 @@ import '../entity/user.dart';
 import 'database_provider.dart';
 
 class UserRepository {
-  // Insert a new user into the database
+
+  // Create new User
   Future<int> createUser(User user) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
@@ -14,14 +15,14 @@ class UserRepository {
     );
   }
 
-  // Retrieve all users
+  // Get all users
   Future<List<User>> getAllUsers() async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(UserTable.tableName);
     return List.generate(maps.length, (i) => User.fromMap(maps[i]));
   }
 
-  // Retrieve User by id
+  // Get User by id
   Future<User?> getUserById(int id) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -35,7 +36,7 @@ class UserRepository {
     return null;
   }
 
-  // Get a user by username
+  // Get User by username
   Future<User?> getUserByUsername(String username) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -49,7 +50,7 @@ class UserRepository {
     return null;
   }
 
-  // Get a user by email
+  // Get a User by email
   Future<User?> getUserByEmail(String email) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -63,7 +64,7 @@ class UserRepository {
     return null;
   }
 
-  // Update a user
+  // Update User
   Future<int> updateUser(User user) async {
     final db = await DatabaseProvider().database;
     return await db.update(
@@ -74,7 +75,7 @@ class UserRepository {
     );
   }
 
-  // Delete a user by ID
+  // Delete User by id
   Future<int> deleteUser(int id) async {
     final db = await DatabaseProvider().database;
     return await db.delete(

@@ -13,15 +13,20 @@ class SvgDisplayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 150.0,
-        title: Stack(
+          backgroundColor: Colors.white,
+        toolbarHeight: 100.0,
+        title: Column(
           children: [
-            Padding(padding: const EdgeInsets.only(top: 50.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0),
               child: Text(
-                "scan your loyalty card's barcode",
-                style: TextStyle(fontSize:
-                16.0
+                textAlign: TextAlign.center,
+                "       loyalty card's barcode",
+                style: TextStyle(
+                    fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -38,10 +43,11 @@ class SvgDisplayScreen extends StatelessWidget {
         children: [
           Positioned(
             top: 50,
+            left: 100,
             child: Image.asset(
               'assets/shopping.gif',
-              width: 1,
-              height: 1,
+              width: 150,
+              height: 150,
               fit: BoxFit.cover,
             ),
           ),

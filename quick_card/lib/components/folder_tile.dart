@@ -1,25 +1,26 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:quick_card/entity/folder.dart';
 
 class FolderTile extends StatelessWidget {
-  final String folderName;
-  final String? imagePath; // Image path of the latest card in the folder (optional)
+  final Folder folder;
   final VoidCallback onTap;
   final Function(BuildContext)? deleteFunction;
 
-  const FolderTile({
-    required this.folderName,
-    this.imagePath,
-    required this.onTap,
-    required this.deleteFunction
-  });
+  const FolderTile(
+      {super.key,
+      required this.folder,
+      required this.onTap,
+      required this.deleteFunction});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      onLongPress: () => _showDeleteConfirmationDialog(context, folderName),
+      onLongPress: () => _showDeleteConfirmationDialog(context, folder.name),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: const EdgeInsets.all(8.0),
@@ -39,24 +40,31 @@ class FolderTile extends StatelessWidget {
           children: [
             // Folder image or default image
             Container(
-              width: 60,
-              height: 60,
+              width: 150,
+              height: 100,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey[200],
-                image: DecorationImage(
-                  image: imagePath != null
-                      ? AssetImage(imagePath!)
-                      : AssetImage('assets/default_folder_image.png'), // Placeholder default image
-                  fit: BoxFit.cover,
-                ),
+                color: Color(0xffa19bf7),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: folder.imagePath != null &&
+                        folder.imagePath!.isNotEmpty &&
+                        File(folder.imagePath!).existsSync()
+                    ? Image.file(
+                        File(folder.imagePath!),
+                        fit: BoxFit.contain,
+                      )
+                    : Image.asset(
+                        'assets/default_folder_image.png', // Replace with your asset path
+                        fit: BoxFit.contain,
+                      ),
               ),
             ),
             SizedBox(width: 16), // Space between image and folder name
             // Folder name text
             Expanded(
               child: Text(
-                folderName,
+                folder.name,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
@@ -110,8 +118,4 @@ class FolderTile extends StatelessWidget {
       },
     );
   }
-
-
 }
-
-
