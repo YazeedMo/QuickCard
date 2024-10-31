@@ -1,11 +1,17 @@
 import 'package:quick_card/data/tables/item_table.dart';
 import 'package:quick_card/entity/item.dart';
+import 'package:quick_card/entity/session.dart';
+import 'package:quick_card/entity/shopping_list.dart';
+import 'package:quick_card/service/item_service.dart';
+import 'package:quick_card/service/session_service.dart';
+import 'package:quick_card/service/shopping_list_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class ItemRepository {
-  // Insert a new item into the database
-  Future<int> insertItem(Item item) async {
+
+  // Create new Item
+  Future<int> createItem(Item item) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
       ItemTable.tableName,
@@ -14,7 +20,7 @@ class ItemRepository {
     );
   }
 
-  // Retrieve all items in a specific shopping list
+  // Get all Items by Shopping List id
   Future<List<Item>> getItemsByShoppingListId(int shoppingListId) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -23,6 +29,20 @@ class ItemRepository {
       whereArgs: [shoppingListId],
     );
     return List.generate(maps.length, (i) => Item.fromMap(maps[i]));
+  }
+
+  // Get Item by id
+  Future<Item?> getItemById(int id) async {
+    final db = await DatabaseProvider().database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      ItemTable.tableName,
+      where: '${ItemTable.columnId} = ?',
+      whereArgs: [id]
+    );
+    if (maps.isNotEmpty) {
+      return Item.fromMap(maps.first);
+    }
+    return null;
   }
 
   // Update an item
@@ -36,7 +56,7 @@ class ItemRepository {
     );
   }
 
-  // Delete an item by ID
+  // Delete Item by Id
   Future<int> deleteItem(int id) async {
     final db = await DatabaseProvider().database;
     return await db.delete(

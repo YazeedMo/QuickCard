@@ -10,10 +10,10 @@ import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/entity/card.dart' as q;
 
 class FolderCreateScreen extends StatefulWidget {
-  String folderName;
+  final String folderName;
   final String? folderImagePath;
 
-  FolderCreateScreen({
+  const FolderCreateScreen({
     super.key,
     required this.folderName,
     this.folderImagePath,
@@ -24,10 +24,13 @@ class FolderCreateScreen extends StatefulWidget {
 }
 
 class _FolderCreateScreenState extends State<FolderCreateScreen> {
-  String message = 'No cards yet. Go scan something 🤦‍♂️';
+
   final SessionService _sessionService = SessionService();
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
+
+  String message = 'No cards yet. Go scan something 🤦‍♂️';
+
   List<dynamic> _cards = [];
   List<int> _selectedCardIds = [];
   int? _newFolderId;
@@ -39,12 +42,7 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   }
 
   Future<void> _loadCards() async {
-    Session? currentSession = await _sessionService.getCurrentSession();
-    int? currentUserId = currentSession!.currentUser;
-    List allUserFolders =
-        await _folderService.getFoldersByUserId(currentUserId!);
-    Folder userDefaultFolder =
-        allUserFolders.firstWhere((folder) => folder.name == 'default');
+    Folder userDefaultFolder = await _folderService.getCurrentUserDefaultFolder();
     List allCards =
         await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
     setState(() {
@@ -53,17 +51,13 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   }
 
   Future<void> _createFolder() async {
-    // Ensure a default folder name if none is provided
-    if (widget.folderName.isEmpty) {
-      widget.folderName = 'Folder';
-    }
 
     // Retrieve the current user session
     Session? currentSession = await _sessionService.getCurrentSession();
     int currentUserId = currentSession!.currentUser!;
 
     // Create the new folder
-    Folder newFolder = Folder(name: widget.folderName, userId: currentUserId);
+    Folder newFolder = Folder(name: widget.folderName, userId: currentUserId, imagePath: widget.folderImagePath);
     _newFolderId = await _folderService.createFolder(newFolder);
 
     // Assign each selected card to the new folder

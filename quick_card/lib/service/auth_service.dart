@@ -7,7 +7,8 @@ class AuthService {
   final SessionService _sessionService = SessionService();
   final UserService _userService = UserService();
 
-  Future<String?> login(String username, String password, bool stayLoggedIn) async {
+  Future<String?> login(
+      String username, String password, bool stayLoggedIn) async {
     // Check if fields are empty
     if (username.isEmpty) return "Please enter username";
     if (password.isEmpty) return "Please enter password";

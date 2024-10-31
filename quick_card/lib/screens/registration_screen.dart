@@ -1,55 +1,27 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:quick_card/data/folder_repository.dart';
-import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/user.dart';
 import 'package:quick_card/screens/home_screen.dart';
-import 'package:quick_card/screens/login_screen.dart';
 import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/service/user_service.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final SessionService _sessionService = SessionService();
+
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
   String errorMessage = '';
   bool _stayLoggedIn = true;
-
-  @override
-  void dispose() {
-    // Clean up the controllers when the widget is removed from the widget tree
-    _usernameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _handleRegistration() async {
-    String username = _usernameController.text.trim();
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-    String confirmPassword = _confirmPasswordController.text.trim();
-
-    // Clear any previous error messages
-    setState(() {
-      errorMessage = '';
-    });
-
-    // Validate user input
-    if (_validateInputs(username, email, password, confirmPassword)) return;
-
-    User user = User(username: username, email: email, password: password);
-    await _registerUser(user);
-  }
 
   bool _validateInputs(
       String username, String email, String password, String confirmPassword) {
@@ -86,6 +58,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return false;
   }
 
+  void _handleRegistration() async {
+    String username = _usernameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+
+    // Clear any previous error messages
+    setState(() {
+      errorMessage = '';
+    });
+
+    // Validate user input
+    if (_validateInputs(username, email, password, confirmPassword)) return;
+
+    User user = User(username: username, email: email, password: password);
+    await _registerUser(user);
+  }
+
   Future<void> _registerUser(User user) async {
     int? result = await UserService().createUser(user);
     if (result == null) {
@@ -93,18 +83,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         errorMessage = 'Username already exists';
       });
     } else {
-      await _createDefaultFolder(result);
       await _updateSession(result);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
-  }
-
-  Future<void> _createDefaultFolder(int userId) async {
-    Folder folder = Folder(name: 'default', userId: userId);
-    await FolderRepository().createFolder(folder);
   }
 
   Future<void> _updateSession(int userId) async {
@@ -116,24 +100,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  /*ClipOval(
-              child: Opacity(
-                opacity: 0.9,
-                child: Image.asset(
-                  'assets/holographic.jpeg',
-                  width: 5,
-                  height: 15,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
-            ),*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true, // Automatically adjusts for the keyboard
       body: SafeArea(
-        child: SingleChildScrollView( // Makes the view scrollable
+        child: SingleChildScrollView(
+          // Makes the view scrollable
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -294,7 +267,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             _handleRegistration();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff8EE4DF), // Background color
+                            backgroundColor:
+                                Color(0xff8EE4DF), // Background color
                             foregroundColor: Colors.black, // Text color
                           ),
                           child: Text(
@@ -337,5 +311,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    // Clean up the controllers when the widget is removed from the widget tree
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 }
-

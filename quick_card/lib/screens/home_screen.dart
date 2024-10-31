@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/entity/user.dart';
-import 'package:quick_card/screens/folder_create_screen.dart';
+import 'package:quick_card/screens/account_screen.dart';
 import 'package:quick_card/screens/cards_screen.dart';
 import 'package:quick_card/screens/folder_screen.dart';
 import 'package:quick_card/screens/login_screen.dart';
-import 'package:quick_card/service/folder_service.dart';
+import 'package:quick_card/screens/shopping_list_screen.dart';
 import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/service/card_service.dart';
-import 'package:quick_card/service/user_service.dart';
+
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  final SessionService _sessionService = SessionService();
+
   String title = '';
   String message = 'No code scanned yet';
-  final SessionService _sessionService = SessionService();
-  final UserService _userService = UserService();
-  final FolderService _folderService = FolderService();
-  final CardService _cardService = CardService();
-  List<dynamic> _cards = [];
+
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    CardsScreen(),
-    FolderScreen(), // Folders screen
-    FolderScreen(), // Shopping List screen
-    BlankScreen(), // Account screen
+    const CardsScreen(),
+    const FolderScreen(), // Folders screen
+    const ShoppingListScreen(), // Shopping List screen
+    AccountScreen(), // Account screen
   ];
 
   void _onItemTapped(int index) {
@@ -54,28 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadCards();
-  }
-
-  Future<void> _loadCards() async {
-    Session? currentSession = await _sessionService.getCurrentSession();
-    int? currentUserId = currentSession!.currentUser;
-    User? user = await _userService.getUserById(currentUserId!);
-    List allUserFolders =
-    await _folderService.getFoldersByUserId(currentUserId);
-    Folder userDefaultFolder =
-    allUserFolders.firstWhere((folder) => folder.name == 'default');
-    List allCards =
-    await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
-    setState(() {
-      title = '${user!.username}\'s Cards';
-      _cards = allCards;
-    });
-  }
-
   void _logout() async {
     // Handle logout logic
     await _sessionService.clearSession();
@@ -88,15 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        title: Text(title, textAlign: TextAlign.center),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: _logout, // Trigger logout on button press
-          ),
-        ],
-      ),*/
       backgroundColor: const Color(0xFFDEDCFB),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

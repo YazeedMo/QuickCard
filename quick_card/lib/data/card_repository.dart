@@ -4,7 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class CardRepository {
-  // Insert a new card into the database
+
+  // Create new Card
   Future<int> createCard(Card card) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
@@ -14,14 +15,14 @@ class CardRepository {
     );
   }
 
-  // Retrieve all cards
+  // Get all Cards
   Future<List<Card>> getAllCards() async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(CardTable.tableName);
     return List.generate(maps.length, (i) => Card.fromMap(maps[i]));
   }
 
-  // Retrieve all cards in a specific folder
+  // Get all Cards by Folder id
   Future<List<Card>> getCardsByFolderId(int folderId) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(

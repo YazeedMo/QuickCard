@@ -6,13 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quick_card/components/folder_tile.dart';
 import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/screens/folder_cards_screen.dart';
 import 'package:quick_card/screens/folder_create_screen.dart';
-import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
-import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/entity/card.dart' as c;
 
 class FolderScreen extends StatefulWidget {
   const FolderScreen({super.key});
@@ -22,13 +18,15 @@ class FolderScreen extends StatefulWidget {
 }
 
 class _FolderScreenState extends State<FolderScreen> {
-  String message = 'No folder yet';
-  final SessionService _sessionService = SessionService();
   final FolderService _folderService = FolderService();
-  final CardService _cardService = CardService();
+
+  String message = 'No folder yet';
   final TextEditingController _folderNameController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
-  File? _selectedImage;
+
+  String _folderImagePath = '';
+  File? _selectedImageFile;
 
   List<dynamic> _folders = [];
 
@@ -39,56 +37,44 @@ class _FolderScreenState extends State<FolderScreen> {
   }
 
   Future<void> _loadFolders() async {
-    Session? currentSession = await _sessionService.getCurrentSession();
-    int? currentUserId = currentSession!.currentUser;
-    _folders = await _folderService.getFoldersByUserId(currentUserId!);
-
+    _folders = await _folderService.getCurrentUserFolders();
     setState(() {
       _folders;
     });
   }
 
-  void _deleteFolder(int id) async {
-    Session? currentSession = await _sessionService.getCurrentSession();
-    int currentUserId = currentSession!.currentUser!;
-    Folder? defaultFolder;
-    List<Folder> allUserFolders = await _folderService.getFoldersByUserId(currentUserId);
-    for (Folder folder in allUserFolders) {
-      if (folder.name == 'default') {
-        defaultFolder = folder;
-        break;
-      }
-    }
-    List<c.Card> allFolderCards = await _cardService.getAllCardsByFolderId(id);
-    for (c.Card card in allFolderCards) {
-      card.folderId = defaultFolder!.id!;
-      await _cardService.updateCard(card);
-    }
-    await _folderService.deleteFolder(id);
-    _loadFolders();
-  }
-
   Future<void> _addNewFolder() async {
+    String folderName = _folderNameController.text.trim();
+    if (folderName.isEmpty) {
+      folderName = 'Card Folder';
+    }
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => FolderCreateScreen(
-                  folderName: _folderNameController.text,
-                  folderImagePath: _selectedImage?.path,
+                  folderName: folderName,
+                  folderImagePath: _folderImagePath,
                 )));
-    if (result == true) {
+    if (result == true && mounted) {
       Navigator.pop(context);
       _loadFolders();
     }
   }
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImageFile = File(pickedFile.path);
+        _folderImagePath = pickedFile.path;
+        print('======================================================== ${_folderImagePath}');
       });
     }
+  }
+
+  void _deleteFolder(int id) async {
+    await _folderService.deleteFolder(id);
+    _loadFolders();
   }
 
   @override
@@ -107,14 +93,15 @@ class _FolderScreenState extends State<FolderScreen> {
               itemBuilder: (context, index) {
                 Folder folder = _folders[index];
                 return FolderTile(
-                    folderName: _folders[index].name,
+                  folder: folder,
                     deleteFunction: (context) => _deleteFolder(folder.id!),
                     onTap: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FolderCardsScreen(folder: folder))
-                      )
-                    });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      FolderCardsScreen(folder: folder)))
+                        });
               },
             ),
       floatingActionButton: FloatingActionButton(
@@ -157,13 +144,13 @@ class _FolderScreenState extends State<FolderScreen> {
                   ),
                   SizedBox(height: 10),
                   // Display the selected image preview (if any)
-                  _selectedImage != null
+                  _selectedImageFile != null
                       ? Image.file(
-                    _selectedImage!,
-                    height: 100,
-                  )
+                          _selectedImageFile!,
+                          height: 100,
+                        )
                       : Text('No image selected',
-                      style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(color: Colors.grey)),
                 ],
               ),
               actions: [
@@ -171,7 +158,7 @@ class _FolderScreenState extends State<FolderScreen> {
                 TextButton(
                   onPressed: () {
                     _folderNameController.clear();
-                    _selectedImage = null;
+                    _selectedImageFile = null;
                     Navigator.of(context).pop();
                   },
                   child: Text('Cancel'),
@@ -190,6 +177,4 @@ class _FolderScreenState extends State<FolderScreen> {
       },
     );
   }
-
 }
-
