@@ -43,18 +43,49 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Center(
             child: SingleChildScrollView(
               child: Container(
+
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/background.jpg'),
                     fit: BoxFit.cover,
+
                   ),
                 ),
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+
                   children: <Widget>[
-                    // Combined title
+
+                    // Profile photo at the top
+                    Padding(
+                padding: EdgeInsets.only(top: 20, bottom: 20), // Padding for spacing
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children:[
+                    ClipOval(
+                  child: Image.asset(
+                    'assets/greenlight.png', // Replace with your image path
+                    width: 150.0,
+                    height: 170.0,
+                    opacity: const AlwaysStoppedAnimation(.6),
+                ),
+              ),
+              SizedBox(width: 20), // Space between the two images
+              // Second circular image
+              ClipOval(
+                child: Image.asset(
+                  'assets/purplelight.png', // Second image path
+                  width: 170.0, // Adjust width
+                  height: 150.0, // Adjust height
+                  opacity: const AlwaysStoppedAnimation(0.6),
+                  fit: BoxFit.cover,
+                ),
+              ),
+                  ],
+                ),
+                    ),
+
                     Center(
                       child: Column(
                         children: [
@@ -90,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 60.0),
+                    SizedBox(height: 30.0),
                     // Login subtitle
                     Center(
                       child: Text(
@@ -170,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
                     // Login button with bold black text
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 40.0),
                     ElevatedButton(
                       onPressed: () {
                         _handleLogin();

@@ -30,7 +30,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
   List<Map<String, String>> premadeIcons = CardUtils().premadeIcons;
 
   // Default barcode formats
-  String _selectedFormat = 'Code 128'; // Default selection
+  String _selectedFormat = 'code 128'; // Default selection
 
   // Function to pick image from gallery
   Future<void> _pickImage() async {
@@ -103,8 +103,14 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Enter Card Details'),
+        backgroundColor: Colors.white,
+        title: Text('enter card details',
+    style: TextStyle(
+    fontWeight: FontWeight.bold, // Make the title bold
+    ),
+      ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -116,12 +122,18 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
               mainAxisSize: MainAxisSize.min, // Centers the content vertically
               crossAxisAlignment: CrossAxisAlignment.center, // Centers the content horizontally
               children: [
+                Image.asset(
+                  'assets/default_card_image.jpg',
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 30),
                 TextFormField(
                   controller: _cardNameController, // Set the controller here
-                  decoration: InputDecoration(labelText: 'Card Name'),
+                  decoration: InputDecoration(labelText: 'card name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a card name';
+                      return 'please enter a card name';
                     }
                     return null;
                   },
@@ -130,12 +142,12 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                   },
                 ),
 
-                SizedBox(height: 16),
+                SizedBox(height: 30),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Manual Code'),
+                  decoration: InputDecoration(labelText: 'barcode number'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter the code';
+                      return 'please enter the barcode';
                     }
                     return null;
                   },
@@ -143,24 +155,63 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                     _manualCode = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 40),
                 if (_selectedImageFile != null)
                   Image.file(_selectedImageFile!, height: 150)
                 else if (_cardImagePath.isNotEmpty)
                   Image.asset(_cardImagePath, height: 150),
+                SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child: Text('Pick Image from Gallery'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60),
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+                    ),
+                  ),
+
+                  child: Text('pick image from gallery',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
                 ),
                 // New button to show premade icons
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _showPremadeIcons,
-                  child: Text('Choose from Premade Icons'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60),
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+                    ),
+                  ),
+                  child: Text('choose from premade icons',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _createNewCard,
-                  child: Text('Add Card'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60), // Set size for the button (height increased)
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),// Button border radius
+                    ),
+                  ),
+                  child: Text('add card',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                  ),
                 ),
               ],
             ),

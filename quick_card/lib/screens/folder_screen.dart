@@ -21,7 +21,7 @@ class FolderScreen extends StatefulWidget {
 class _FolderScreenState extends State<FolderScreen> {
   final FolderService _folderService = FolderService();
 
-  String message = 'No folder yet';
+  String message = 'no folder yet';
   final TextEditingController _folderNameController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
@@ -47,7 +47,7 @@ class _FolderScreenState extends State<FolderScreen> {
   Future<void> _addNewFolder() async {
     String folderName = _folderNameController.text.trim();
     if (folderName.isEmpty) {
-      folderName = 'Card Folder';
+      folderName = 'card folder';
     }
     final result = await Navigator.push(
         context,
@@ -68,7 +68,6 @@ class _FolderScreenState extends State<FolderScreen> {
       setState(() {
         _selectedImageFile = File(pickedFile.path);
         _folderImagePath = pickedFile.path;
-        print('======================================================== ${_folderImagePath}');
       });
     }
   }
@@ -117,39 +116,41 @@ class _FolderScreenState extends State<FolderScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('Create New Folder'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Folder Name Input Field
-                  TextField(
-                    controller: _folderNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Folder Name',
-                      border: OutlineInputBorder(),
+              title: Text('create new folder'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Folder Name Input Field
+                    TextField(
+                      controller: _folderNameController,
+                      decoration: InputDecoration(
+                        labelText: 'folder name',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  // Image Picker Button
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await _pickImage();
-                      // Update dialog state after picking an image
-                      setState(() {});
-                    },
-                    icon: Icon(Icons.image),
-                    label: Text('Add Image from Gallery'),
-                  ),
-                  SizedBox(height: 10),
-                  // Display the selected image preview (if any)
-                  _selectedImageFile != null
-                      ? Image.file(
-                          _selectedImageFile!,
-                          height: 100,
-                        )
-                      : Text('No image selected',
-                          style: TextStyle(color: Colors.grey)),
-                ],
+                    SizedBox(height: 20),
+                    // Image Picker Button
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await _pickImage();
+                        // Update dialog state after picking an image
+                        setState(() {});
+                      },
+                      icon: Icon(Icons.image),
+                      label: Text('add image from gallery'),
+                    ),
+                    SizedBox(height: 10),
+                    // Display the selected image preview (if any)
+                    _selectedImageFile != null
+                        ? Image.file(
+                      _selectedImageFile!,
+                      height: 100,
+                    )
+                        : Text('no image selected',
+                        style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
               ),
               actions: [
                 // Cancel Button
@@ -159,14 +160,14 @@ class _FolderScreenState extends State<FolderScreen> {
                     _selectedImageFile = null;
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel'),
+                  child: Text('cancel'),
                 ),
                 // Create Button
                 ElevatedButton(
                   onPressed: () {
                     _addNewFolder();
                   },
-                  child: Text('Create'),
+                  child: Text('create'),
                 ),
               ],
             );

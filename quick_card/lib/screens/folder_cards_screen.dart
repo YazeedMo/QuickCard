@@ -17,7 +17,7 @@ class FolderCardsScreen extends StatefulWidget {
 }
 
 class _FolderCardsScreenState extends State<FolderCardsScreen> {
-  String message = 'No cards in this folder';
+  String message = 'no cards in this folder';
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
   List<dynamic> _cards = [];
@@ -43,8 +43,10 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFDEDCFB),
       appBar: AppBar(
-        title: Text('Folder: ${widget.folder.name} '),
+        backgroundColor: Color(0xFFDEDCFB),
+        title: Text('folder: ${widget.folder.name} '),
       ),
       body: _cards.isEmpty
           ? Center(

@@ -60,7 +60,11 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mobile Scanner'),
+        backgroundColor: Colors.white,
+        title: Text('mobile scanner',
+        style: TextStyle(
+          fontWeight: FontWeight.bold), // Make the title bold
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.flash_on),
@@ -92,7 +96,7 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
             )
           : Center(
               child: Text(
-                'Processing...',
+                'processing...',
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -102,16 +106,18 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
         child: Center(
           child: barcodeData != null
               ? Text(
-                  'Scanned Code: $barcodeData',
+                  'scanned code: $barcodeData',
                   style: TextStyle(fontSize: 18),
                 )
               : TextButton(
                   onPressed: () {
                     _addNewManualCard();
                   },
+
+
                   child: Text(
-                    'Enter code manually instead',
-                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                    'or enter barcode manually',
+                    style: TextStyle(fontSize: 22, color: Colors.black,fontWeight: FontWeight.bold),
                   ),
                 ),
         ),

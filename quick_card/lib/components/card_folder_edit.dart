@@ -30,24 +30,12 @@ class CardFolderEdit extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
-        width: tileWidth,
-        height: tileHeight,
+        width: tileWidth * 0.9,
+        height: tileHeight * 0.6,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: const [Color(0xff382EF2), Color(0xff8EE4DF)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          color: Color(0xffa19bf7),
+          borderRadius: BorderRadius.circular(20),
           ),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3), // Changes shadow position
-            ),
-          ],
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -69,7 +57,7 @@ class CardFolderEdit extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       textAlign: TextAlign.start,
                       maxLines: 1, // Prevents overflow by limiting to a single line

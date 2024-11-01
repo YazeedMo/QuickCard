@@ -14,66 +14,64 @@ class SvgDisplayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100.0), // Custom height for AppBar
+        child: AppBar(
           backgroundColor: Colors.white,
-        toolbarHeight: 100.0,
-        title: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0),
-              child: Text(
-                textAlign: TextAlign.center,
-                "       loyalty card's barcode",
-                style: TextStyle(
-                    fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
+          flexibleSpace: Center( // Center content in the AppBar
+            child: Text(
+              "loyalty card's barcode",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
-
-          ],
-        )
-
-
-
-
-
+          ),
+        ),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 50,
-            left: 100,
-            child: Image.asset(
+      body: Center( // Center the whole body content
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children:  [
+            SizedBox(height: 60),
+            Image.asset(
               'assets/shopping.gif',
-              width: 150,
-              height: 150,
+              width: 220,
+              height: 220,
               fit: BoxFit.cover,
             ),
-          ),
-          Center(
-              child: SingleChildScrollView(    // To allow scrolling if the SVG is larger than the screen
+            SizedBox(height: 180),
+
+            Center(
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Display the SVG image
-                    SvgPicture.string(
-                      svg,
-                      height: 100, // Adjust height as needed
-                      width: 50, // Adjust width as needed
-                      placeholderBuilder: (BuildContext context) =>
-                          Container(
-                            child: Center(child: CircularProgressIndicator()),
-                            height: 300,
-                            width: 300,
-                          ),
+                    // Wrap the SVG in a Container for better size control
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 200, // Set a maximum height
+                        maxWidth: 300, // Set a maximum width
+                      ),
+                      child: SvgPicture.string(
+                        svg,
+                        fit: BoxFit.contain, // Maintain aspect ratio
+                        placeholderBuilder: (BuildContext context) => Container(
+                          child: Center(child: CircularProgressIndicator()),
+                          height: 100,
+                          width: 200,
+                        ),
+                      ),
                     ),
                   ],
                 ),
+              ),
             ),
-          ),
-      ]
-    ),
+          ],
+        ),
+      ),
     );
   }
 }
