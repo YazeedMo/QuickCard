@@ -107,8 +107,14 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Enter Card Details'),
+        backgroundColor: Colors.white,
+        title: Text('enter card details',
+          style: TextStyle(
+            fontWeight: FontWeight.bold, // Make the title bold
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -120,12 +126,18 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Image.asset(
+                  'assets/default_card_image.jpg',
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 50),
                 TextFormField(
                   controller: _cardNameController, // Set the controller here
-                  decoration: InputDecoration(labelText: 'Card Name'),
+                  decoration: InputDecoration(labelText: 'card name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a card name';
+                      return 'please enter a card name';
                     }
                     return null;
                   },
@@ -134,23 +146,61 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
                   },
                 ),
 
-                SizedBox(height: 16),
+                SizedBox(height: 40),
                 if (_selectedImageFile != null)
                   Image.file(_selectedImageFile!, height: 150)
                 else if (_cardImagePath.isNotEmpty)
                   Image.asset(_cardImagePath, height: 150),
+                SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child: Text('Pick Image from Gallery'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60),
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+                    ),
+                  ),
+                  child: Text('pick image from gallery',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
                 ),
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _showPremadeIcons,
-                  child: Text('Choose from Premade Icons'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60),
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+                    ),
+                  ),
+                  child: Text('choose from premade Icons',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _createNewCard,
-                  child: Text('Add Card'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8EE4DF), // Button background color
+                    foregroundColor: Colors.black, // Text color
+                    minimumSize: Size(380, 60), // Set size for the button (height increased)
+                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),// Button border radius
+                    ),
+                  ),
+                  child: Text('add card',
+                    style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                  ),
                 ),
               ],
             ),

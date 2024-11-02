@@ -29,7 +29,7 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
 
-  String message = 'No cards yet. Go scan something 🤦‍♂️';
+  String message = 'no cards yet. go scan something️';
 
   List<dynamic> _cards = [];
   List<int> _selectedCardIds = [];
@@ -84,8 +84,10 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFDEDCFB),
       appBar: AppBar(
-        title: Text('Add cards to folder'),
+        backgroundColor: Color(0xFFDEDCFB),
+        title: Text('add cards to folder'),
       ),
       body: Column(
         children: [
@@ -115,10 +117,12 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
                           setState(() {
                             if (value == true) {
                               _selectedCardIds.add(card.id);
-                            } else {
+                            }
+                            else {
                               _selectedCardIds.remove(card.id);
                             }
-                          });
+                          }
+                          );
                         },
                       );
                     },
@@ -131,7 +135,7 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
                 onPressed: () {
                   _createFolder();
                 },
-                child: Text('Add cards and create folder'),
+                child: Text('add cards and create folder'),
               ),
             ),
           ),

@@ -18,7 +18,7 @@ class CardsScreen extends StatefulWidget {
 
 class _CardsScreenState extends State<CardsScreen> {
   final CardService _cardService = CardService();
-  String message = 'No code scanned yet';
+  String message = 'no code scanned yet';
   List<c.Card> _cards = [];
   bool _isLoading = true;
 

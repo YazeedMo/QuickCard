@@ -73,7 +73,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           : _items.isEmpty
               ? Center(
                   child: Text(
-                    'No items',
+                    'no items',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 )
@@ -98,11 +98,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Add New Item"),
+          title: Text(" add new item"),
           content: TextField(
             autofocus: true,
             decoration: InputDecoration(
-              hintText: "Enter item name",
+              hintText: "enter item name",
             ),
             onChanged: (value) {
               newItemName = value;
@@ -110,13 +110,13 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text("cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Add"),
+              child: Text("add"),
               onPressed: () {
                 if (newItemName.isNotEmpty) {
                   _addItem(newItemName);

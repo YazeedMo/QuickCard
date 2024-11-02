@@ -87,8 +87,8 @@ class FolderTile extends StatelessWidget {
         // Determine the appropriate dialog to show
         if (folderName == 'default') {
           return AlertDialog(
-            title: Text('Default Folder'),
-            content: Text('You cannot delete the default folder.'),
+            title: Text('default folder'),
+            content: Text('you cannot delete the default folder.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(), // Close dialog
@@ -98,12 +98,12 @@ class FolderTile extends StatelessWidget {
           );
         } else {
           return AlertDialog(
-            title: Text('Delete Folder'),
-            content: Text('Are you sure you want to delete this folder?'),
+            title: Text('delete folder'),
+            content: Text('are you sure you want to delete this folder?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(), // Close dialog
-                child: Text('Cancel'),
+                child: Text('cancel'),
               ),
               TextButton(
                 onPressed: () {
@@ -112,7 +112,7 @@ class FolderTile extends StatelessWidget {
                   }
                   Navigator.of(context).pop(); // Close dialog
                 },
-                child: Text('Delete'),
+                child: Text('delete'),
               ),
             ],
           );

@@ -80,7 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     int? result = await UserService().createUser(user);
     if (result == null) {
       setState(() {
-        errorMessage = 'Username already exists';
+        errorMessage = 'username already exists';
       });
     } else {
       await _updateSession(result);
@@ -114,18 +114,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // Profile photo at the top
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/holographic.jpeg', // Replace with your image path
-                      width: 150.0,
-                      height: 100.0,
-                      opacity: const AlwaysStoppedAnimation(.6),
-                      fit: BoxFit.cover,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // First Profile photo
+                    Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/holographic.jpeg', // Replace with your image path
+                          width: 60.0,
+                          height: 80.0,
+                          opacity: const AlwaysStoppedAnimation(0.6),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
+                    // Second Profile photo
+
+                    // Third Profile photo
+                    ClipOval(
+                      child: Image.asset(
+                        'assets/greendark.png', // Replace with your image path
+                        width: 80.0,
+                        height: 100.0,
+                        opacity: const AlwaysStoppedAnimation(0.6),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height:20.0),
                 Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Center(
@@ -140,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 8.0), // Spacing between the labels
+                        SizedBox(height: 10.0), // Spacing between the labels
                         Text(
                           'create your account',
                           style: TextStyle(
@@ -164,13 +183,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: _usernameController,
                           decoration: InputDecoration(
                             prefixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Image.asset(
                                 'assets/user.png',
                                 width: 15,
                                 height: 15,
                               ),
                             ),
+
                             labelText: 'username',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
@@ -186,7 +206,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: _emailController,
                           decoration: InputDecoration(
                             prefixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Image.asset(
                                 'assets/mail.png',
                                 width: 15,
@@ -209,7 +229,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             prefixIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Image.asset(
                                 'assets/lock.png',
                                 width: 15,
@@ -260,7 +280,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
-                        SizedBox(height: 50.0),
+                        SizedBox(height: 40.0),
                         // Register button
                         ElevatedButton(
                           onPressed: () {

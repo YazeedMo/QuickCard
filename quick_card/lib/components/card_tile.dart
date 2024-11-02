@@ -59,30 +59,36 @@ class CardTile extends StatelessWidget {
                 height: tileHeight * 0.6,
                 decoration: BoxDecoration(
                   color: Color(0xffa19bf7),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Center(
-                  // Check if the path starts with "assets/" to load the image correctly
-                  child: card.imagePath != null &&
-                      card.imagePath!.isNotEmpty &&
-                      card.imagePath!.startsWith("assets/")
-                      ? Image.asset(
-                    card.imagePath!,
-                    fit: BoxFit.contain,
-                  )
-                      : (card.imagePath != null &&
-                      card.imagePath!.isNotEmpty &&
-                      File(card.imagePath!).existsSync()
-                      ? Image.file(
-                    File(card.imagePath!),
-                    fit: BoxFit.contain,
-                  )
-                      : Image.asset(
-                    'assets/default_card_image.jpg',
-                    fit: BoxFit.contain,
-                  )),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20), // Rounded corners from Version 1
+                  child: Center(
+                    child: card.imagePath != null &&
+                        card.imagePath!.isNotEmpty
+                        ? (card.imagePath!.startsWith("assets/")
+                        ? Image.asset(
+                      card.imagePath!,
+                      fit: BoxFit.contain, // Uses BoxFit from Version 2
+                    )
+                        : (File(card.imagePath!).existsSync()
+                        ? Image.file(
+                      File(card.imagePath!),
+                      fit: BoxFit.contain, // Uses BoxFit from Version 2
+                    )
+                        : Image.asset(
+                      'assets/default_card_image.jpg',
+                      fit: BoxFit.contain, // Uses BoxFit from Version 2
+                    )))
+                        : Image.asset(
+                      'assets/default_card_image.jpg', // Default image if path is empty
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
+
               ),
+
             ],
           ),
         ),
@@ -117,3 +123,4 @@ class CardTile extends StatelessWidget {
     );
   }
 }
+

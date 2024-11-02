@@ -55,17 +55,17 @@ class _AccountScreenState extends State<AccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Delete Account"),
-          content: Text("Are you sure you want to delete your account? This action cannot be undone."),
+          title: Text("delete account"),
+          content: Text("are you sure you want to delete your account? this action cannot be undone."),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text("cancel"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: Text("Delete"),
+              child: Text("delete"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _deleteAccount();
@@ -91,7 +91,7 @@ class _AccountScreenState extends State<AccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Change Password"),
+          title: Text("change password"),
           content: Form(
             key: _formKey,
             child: Column(
@@ -99,10 +99,10 @@ class _AccountScreenState extends State<AccountScreen> {
               children: [
                 TextFormField(
                   obscureText: true,
-                  decoration: InputDecoration(labelText: "New Password"),
+                  decoration: InputDecoration(labelText: "new password"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a new password';
+                      return 'please enter a new password';
                     }
                     return null;
                   },
@@ -112,12 +112,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 TextFormField(
                   obscureText: true,
-                  decoration: InputDecoration(labelText: "Confirm Password"),
+                  decoration: InputDecoration(labelText: "confirm password"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return 'please confirm your password';
                     } else if (value != newPassword) {
-                      return 'Passwords do not match';
+                      return 'passwords do not match';
                     }
                     return null;
                   },
@@ -130,20 +130,20 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text("cancel"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: Text("Change"),
+              child: Text("change"),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _changePassword(newPassword);
                   Navigator.of(context).pop(); // Close the dialog
                   // Optionally, show a success message
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Password changed successfully!')),
+                    SnackBar(content: Text('password changed successfully!')),
                   );
                 }
               },
@@ -169,7 +169,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 children: [
                   Text(
-                    user?.username ?? 'Loading...',
+                    user?.username ?? 'loading...',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    user?.email ?? 'Loading...',
+                    user?.email ?? 'loading...',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black54,
@@ -187,55 +187,55 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 60),
 
             // Change Password button
             ElevatedButton(
               onPressed: _showChangePasswordDialog, // Show change password dialog
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Color(0xffa4a0f9),
                 padding: EdgeInsets.symmetric(vertical: 14.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
               child: Text(
-                'Change Password',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                'change password',
+                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 30),
 
             // Logout button
             ElevatedButton(
               onPressed: _logout, // Use the logout function
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orangeAccent,
+                backgroundColor: Color(0xffa4a0f9),
                 padding: EdgeInsets.symmetric(vertical: 14.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
               child: Text(
-                'Logout',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                'logout',
+                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 30),
 
             // Delete Account button
             ElevatedButton(
               onPressed: _showDeleteAccountDialog, // Show delete confirmation dialog
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Color(0xffa4a0f9),
                 padding: EdgeInsets.symmetric(vertical: 14.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
               child: Text(
-                'Delete Account',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                'delete account',
+                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold ),
               ),
             ),
           ],
