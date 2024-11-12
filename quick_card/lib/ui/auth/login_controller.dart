@@ -14,7 +14,7 @@ class LoginController {
   bool stayLoggedIn = true;
 
   Future<String?> handleLogin(BuildContext context) async {
-    String username = usernameController.text.trim().toLowerCase();
+    String username = usernameController.text.trim();
     String password = passwordController.text;
 
     String? message = _validateInput();

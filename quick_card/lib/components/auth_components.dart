@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthTextField extends StatefulWidget {
   final BuildContext buildContext;
@@ -25,11 +26,20 @@ class AuthTextField extends StatefulWidget {
 }
 
 class _AuthTextFieldState extends State<AuthTextField> {
+
+  late bool _isObscured;
+
+  @override
+  void initState() {
+    super.initState();
+    _isObscured = widget.obscureText;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
-      obscureText: widget.obscureText,
+      obscureText: _isObscured,
       focusNode: widget.thisFocusNode,
       onSubmitted: (_) {
         if (widget.nextFocusNode != null) {
@@ -54,6 +64,23 @@ class _AuthTextFieldState extends State<AuthTextField> {
         ),
         filled: true,
         fillColor: const Color(0xFFDEDCFB),
+        suffixIcon: widget.obscureText
+          ? GestureDetector(
+          onTap: () {
+            setState(() {
+              _isObscured = !_isObscured;
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SvgPicture.asset(
+              _isObscured ? 'assets/eye-slash-solid.svg' : 'assets/eye-solid.svg',
+              width: 15,
+              height: 15,
+            ),
+          ),
+        )
+            : null
       ),
     );
   }
