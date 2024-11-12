@@ -13,10 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   String title = 'your';
-  String message = 'No code scanned yet';
-
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
@@ -42,8 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
     }
     setState(() {
-      title;
       _selectedIndex = index;
+    });
+  }
+
+  void _goToHomePage() {
+    setState(() {
+      _selectedIndex = 0;
+      title = "your";
     });
   }
 
@@ -62,26 +65,29 @@ class _HomeScreenState extends State<HomeScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 1), // Spacing between titles
-          RichText(
-            text: const TextSpan(
-              children: [
-                TextSpan(
-                  text: 'quick',
-                  style: TextStyle(
-                    fontSize: 52.0,
-                    color: Colors.black,
+          const SizedBox(height: 1),
+          InkWell(
+            onTap: _goToHomePage,
+            child: RichText(
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'quick',
+                    style: TextStyle(
+                      fontSize: 52.0,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: 'cards',
-                  style: TextStyle(
-                    fontSize: 52.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF382EF2),
+                  TextSpan(
+                    text: 'cards',
+                    style: TextStyle(
+                      fontSize: 52.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF382EF2),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(child: _screens[_selectedIndex]),
@@ -116,10 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xff000000),
+        selectedItemColor: const Color(0xff534aec),
         unselectedItemColor: Colors.black54,
         backgroundColor: const Color(0xFFDEDCFB),
-
         onTap: _onItemTapped,
       ),
     );
