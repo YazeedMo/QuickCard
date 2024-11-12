@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/card_tile.dart';
 import 'package:quick_card/components/add_button.dart';
-import 'package:quick_card/screens/card_scanner_screen.dart';
-import 'package:quick_card/screens/svg_display_screen.dart';
+import 'package:quick_card/ui/cards/card_scanner_screen.dart';
+import 'package:quick_card/ui/cards/card_display_screen.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/entity/card.dart' as c;
 
@@ -88,7 +88,7 @@ class _CardsScreenState extends State<CardsScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                SvgDisplayScreen(svg: card.svg),
+                                CardDisplayScreen(svg: card.svg),
                           ),
                         );
                       },

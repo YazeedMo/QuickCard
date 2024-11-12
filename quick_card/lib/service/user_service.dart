@@ -1,5 +1,5 @@
-import 'package:quick_card/data/folder_repository.dart';
-import 'package:quick_card/data/user_repository.dart';
+import 'package:quick_card/repository/folder_repository.dart';
+import 'package:quick_card/repository/user_repository.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/shopping_list.dart';
 import 'package:quick_card/entity/user.dart';

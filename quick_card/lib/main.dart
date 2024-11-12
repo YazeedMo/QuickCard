@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/screens/home_screen.dart';
-import 'package:quick_card/screens/login_screen.dart';
-import 'package:quick_card/screens/splash_screen_main.dart';
+import 'package:quick_card/ui/home/home_screen.dart';
+import 'package:quick_card/ui/auth/login_screen.dart';
+import 'package:quick_card/ui/splash/splash_screen_main.dart';
 import 'package:quick_card/service/session_service.dart';
 
 void main() async {

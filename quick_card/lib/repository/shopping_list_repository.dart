@@ -1,5 +1,4 @@
-import 'package:quick_card/data/tables/shopping_list_table.dart';
-import 'package:quick_card/entity/folder.dart';
+import 'package:quick_card/repository/tables/shopping_list_table.dart';
 import 'package:quick_card/entity/shopping_list.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';

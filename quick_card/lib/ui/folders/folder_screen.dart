@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quick_card/components/add_button.dart';
 import 'package:quick_card/components/folder_tile.dart';
 import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/screens/folder_cards_screen.dart';
-import 'package:quick_card/screens/folder_create_screen.dart';
+import 'package:quick_card/ui/folders/folder_cards_screen.dart';
+import 'package:quick_card/ui/folders/folder_create_screen.dart';
 import 'package:quick_card/service/folder_service.dart';
 
 class FolderScreen extends StatefulWidget {

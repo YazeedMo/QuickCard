@@ -1,10 +1,9 @@
-import 'package:quick_card/data/folder_repository.dart';
+import 'package:quick_card/repository/folder_repository.dart';
 import 'package:quick_card/entity/card.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/service/user_service.dart';
 
 class FolderService {
   final FolderRepository _folderRepository = FolderRepository();

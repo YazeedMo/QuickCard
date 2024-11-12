@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quick_card/screens/account_screen.dart';
-import 'package:quick_card/screens/cards_screen.dart';
-import 'package:quick_card/screens/folder_screen.dart';
-import 'package:quick_card/screens/login_screen.dart';
-import 'package:quick_card/screens/shopping_list_screen.dart';
-import 'package:quick_card/service/session_service.dart';
+import 'package:quick_card/ui/account/account_screen.dart';
+import 'package:quick_card/ui/cards/cards_screen.dart';
+import 'package:quick_card/ui/folders/folder_screen.dart';
+import 'package:quick_card/ui/shopping_list/shopping_list_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,8 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  final SessionService _sessionService = SessionService();
-
   String title = '';
   String message = 'No code scanned yet';
 
@@ -25,9 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const CardsScreen(),
-    const FolderScreen(), // Folders screen
-    const ShoppingListScreen(), // Shopping List screen
-    AccountScreen(), // Account screen
+    const FolderScreen(),
+    const ShoppingListScreen(),
+    const AccountScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -51,15 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _logout() async {
-    // Handle logout logic
-    await _sessionService.clearSession();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-          (route) => false, // This will remove all routes before the LoginScreen
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,17 +54,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Center(
             child: Text(
               title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 1), // Spacing between titles
+          const SizedBox(height: 1), // Spacing between titles
           RichText(
-            text: TextSpan(
+            text: const TextSpan(
               children: [
                 TextSpan(
                   text: 'quick',
@@ -129,9 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff000000),
+        selectedItemColor: const Color(0xff000000),
         unselectedItemColor: Colors.black54,
-        backgroundColor: Color(0xFFDEDCFB),
+        backgroundColor: const Color(0xFFDEDCFB),
 
         onTap: _onItemTapped,
       ),
@@ -139,18 +126,4 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Blank screen widget for other tabs
-class BlankScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFDEDCFB),
-      body: Center(
-        child: Text(
-          'Blank Screen',
-          style: TextStyle(fontSize: 24, color: Colors.grey),
-        ),
-      ),
-    );
-  }
-}
+

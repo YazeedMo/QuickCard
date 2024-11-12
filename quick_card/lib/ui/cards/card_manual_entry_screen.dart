@@ -30,7 +30,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
   List<Map<String, String>> premadeIcons = CardUtils().premadeIcons;
 
   // Default barcode formats
-  String _selectedFormat = 'code 128'; // Default selection
+  final String _selectedFormat = 'code 128'; // Default selection
 
   // Function to pick image from gallery
   Future<void> _pickImage() async {
