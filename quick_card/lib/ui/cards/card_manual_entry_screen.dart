@@ -45,10 +45,8 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
   }
 
   void _createNewCard() async {
-
     Session? session = await SessionService().getCurrentSession();
     int? userId = session!.currentUserId;
-
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -127,11 +125,17 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                 crossAxisAlignment: CrossAxisAlignment
                     .center, // Centers the content horizontally
                 children: [
-                  Image.asset(
-                    'assets/default_card_image.jpg',
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
+                  if (_selectedImageFile != null)
+                    Image.file(_selectedImageFile!, height: 150)
+                  else if (_cardImagePath.isNotEmpty)
+                    Image.asset(_cardImagePath, height: 150)
+                  else
+                    Image.asset(
+                      'assets/default_card_image.jpg',
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+
                   SizedBox(height: 30),
                   TextFormField(
                     controller: _cardNameController, // Set the controller here
@@ -160,11 +164,6 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       _manualCode = value!;
                     },
                   ),
-                  SizedBox(height: 40),
-                  if (_selectedImageFile != null)
-                    Image.file(_selectedImageFile!, height: 150)
-                  else if (_cardImagePath.isNotEmpty)
-                    Image.asset(_cardImagePath, height: 150),
                   SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: _pickImage,

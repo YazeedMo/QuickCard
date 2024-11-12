@@ -5,7 +5,7 @@ class AuthTextField extends StatefulWidget {
   final BuildContext buildContext;
   final TextEditingController controller;
   final String text;
-  final String imagePath;
+  final String? imagePath; // Made imagePath nullable
   final bool obscureText;
   final FocusNode thisFocusNode;
   final FocusNode? nextFocusNode;
@@ -15,7 +15,7 @@ class AuthTextField extends StatefulWidget {
     required this.buildContext,
     required this.controller,
     required this.text,
-    required this.imagePath,
+    this.imagePath, // imagePath is now optional
     required this.obscureText,
     required this.thisFocusNode,
     this.nextFocusNode,
@@ -26,7 +26,6 @@ class AuthTextField extends StatefulWidget {
 }
 
 class _AuthTextFieldState extends State<AuthTextField> {
-
   late bool _isObscured;
 
   @override
@@ -49,14 +48,17 @@ class _AuthTextFieldState extends State<AuthTextField> {
         }
       },
       decoration: InputDecoration(
-        prefixIcon: Padding(
+        // Check if imagePath is not null, then display prefixIcon
+        prefixIcon: widget.imagePath != null
+            ? Padding(
           padding: const EdgeInsets.all(10.0),
           child: Image.asset(
-            widget.imagePath,
+            widget.imagePath!,
             width: 15,
             height: 15,
           ),
-        ),
+        )
+            : null, // No prefixIcon if imagePath is null
         labelText: widget.text,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -65,7 +67,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
         filled: true,
         fillColor: const Color(0xFFDEDCFB),
         suffixIcon: widget.obscureText
-          ? GestureDetector(
+            ? GestureDetector(
           onTap: () {
             setState(() {
               _isObscured = !_isObscured;
@@ -74,17 +76,20 @@ class _AuthTextFieldState extends State<AuthTextField> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: SvgPicture.asset(
-              _isObscured ? 'assets/eye-slash-solid.svg' : 'assets/eye-solid.svg',
+              _isObscured
+                  ? 'assets/eye-slash-solid.svg'
+                  : 'assets/eye-solid.svg',
               width: 15,
               height: 15,
             ),
           ),
         )
-            : null
+            : null,
       ),
     );
   }
 }
+
 
 class AuthButton extends StatelessWidget {
   final VoidCallback onTap;

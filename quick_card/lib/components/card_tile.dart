@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:quick_card/components/card_image_widget.dart';
 import 'package:quick_card/entity/card.dart' as c;
 
 class CardTile extends StatelessWidget {
@@ -64,26 +65,7 @@ class CardTile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20), // Rounded corners from Version 1
                   child: Center(
-                    child: card.imagePath != null &&
-                        card.imagePath!.isNotEmpty
-                        ? (card.imagePath!.startsWith("assets/")
-                        ? Image.asset(
-                      card.imagePath!,
-                      fit: BoxFit.contain, // Uses BoxFit from Version 2
-                    )
-                        : (File(card.imagePath!).existsSync()
-                        ? Image.file(
-                      File(card.imagePath!),
-                      fit: BoxFit.contain, // Uses BoxFit from Version 2
-                    )
-                        : Image.asset(
-                      'assets/default_card_image.jpg',
-                      fit: BoxFit.contain, // Uses BoxFit from Version 2
-                    )))
-                        : Image.asset(
-                      'assets/default_card_image.jpg', // Default image if path is empty
-                      fit: BoxFit.contain,
-                    ),
+                    child: CardImageWidget(imagePath: card.imagePath,),
                   ),
                 ),
 
