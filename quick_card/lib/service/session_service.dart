@@ -9,14 +9,14 @@ class SessionService {
     return await _sessionRepository.createSession(session);
   }
 
-  // Get Session by id
-  Future<Session?> getSessionById(int id) async {
-    return await _sessionRepository.getSessionById(id);
-  }
-
   // Get current Session
   Future<Session?> getCurrentSession() async {
     return await _sessionRepository.getCurrentSession();
+  }
+
+  // Get current User id
+  Future<int> getCurrentUserId() async {
+    return await _sessionRepository.getCurrentUserId();
   }
 
   // Update Session
@@ -33,7 +33,7 @@ class SessionService {
   Future<void> clearSession() async {
     Session currentSession = await initializeSessionIfNeeded();
     currentSession.stayLoggedIn = false;
-    currentSession.currentUser = null;
+    currentSession.currentUserId = null;
     await updateSession(currentSession);
   }
 

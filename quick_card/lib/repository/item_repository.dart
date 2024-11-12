@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class ItemRepository {
-
   // Create new Item
   Future<int> createItem(Item item) async {
     final db = await DatabaseProvider().database;
@@ -15,7 +14,7 @@ class ItemRepository {
     );
   }
 
-  // Get all Items by Shopping List id
+  // Get all Items by ShoppingList id
   Future<List<Item>> getItemsByShoppingListId(int shoppingListId) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -29,18 +28,15 @@ class ItemRepository {
   // Get Item by id
   Future<Item?> getItemById(int id) async {
     final db = await DatabaseProvider().database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      ItemTable.tableName,
-      where: '${ItemTable.columnId} = ?',
-      whereArgs: [id]
-    );
+    final List<Map<String, dynamic>> maps = await db.query(ItemTable.tableName,
+        where: '${ItemTable.columnId} = ?', whereArgs: [id]);
     if (maps.isNotEmpty) {
       return Item.fromMap(maps.first);
     }
     return null;
   }
 
-  // Update an item
+  // Update item
   Future<int> updateItem(Item item) async {
     final db = await DatabaseProvider().database;
     return await db.update(

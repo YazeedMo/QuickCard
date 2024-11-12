@@ -78,14 +78,23 @@ class CardFolderEdit extends StatelessWidget {
               ),
               child: Center(
                 child: card.imagePath != null &&
-                    card.imagePath!.isNotEmpty &&
-                    File(card.imagePath!).existsSync()
+                    card.imagePath!.isNotEmpty
+                    ? (card.imagePath!.startsWith("assets/")
+                    ? Image.asset(
+                  card.imagePath!,
+                  fit: BoxFit.contain, // Uses BoxFit from Version 2
+                )
+                    : (File(card.imagePath!).existsSync()
                     ? Image.file(
                   File(card.imagePath!),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.contain, // Uses BoxFit from Version 2
                 )
                     : Image.asset(
-                  'assets/default_card_image.jpg', // Replace with your asset path
+                  'assets/default_card_image.jpg',
+                  fit: BoxFit.contain, // Uses BoxFit from Version 2
+                )))
+                    : Image.asset(
+                  'assets/default_card_image.jpg', // Default image if path is empty
                   fit: BoxFit.contain,
                 ),
               ),

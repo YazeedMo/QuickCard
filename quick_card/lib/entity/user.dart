@@ -11,7 +11,7 @@ class User {
     required this.password
   });
 
-  // Convert a User object into a map for the database
+  // Convert User object into a map for database storage
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -21,7 +21,7 @@ class User {
     };
   }
 
-  // Convert a map from the database back into a User object
+  // Convert map to User object
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'],

@@ -66,7 +66,7 @@ class RegistrationController {
   Future<void> _updateSession(int userId) async {
     Session? currentSession = await _sessionService.getCurrentSession();
     if (currentSession != null) {
-      currentSession.currentUser = userId;
+      currentSession.currentUserId = userId;
       currentSession.stayLoggedIn = stayLoggedIn;
       await _sessionService.updateSession(currentSession);
     }

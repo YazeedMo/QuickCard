@@ -13,9 +13,6 @@ class LoginController {
   final FocusNode passwordFocusNode = FocusNode();
   bool stayLoggedIn = true;
 
-  /// Checks if text fields are valid and attempts to login
-  /// If input is invalid, returns a String message
-  /// If input is valid and credential correct, logs in and navigates to home page
   Future<String?> handleLogin(BuildContext context) async {
     String username = usernameController.text.trim().toLowerCase();
     String password = passwordController.text;

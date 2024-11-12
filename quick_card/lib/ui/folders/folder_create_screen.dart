@@ -7,7 +7,6 @@ import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
 import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/entity/card.dart' as q;
 
 class FolderCreateScreen extends StatefulWidget {
   final String folderName;
@@ -32,8 +31,7 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   String message = 'no cards yet. go scan something️';
 
   List<dynamic> _cards = [];
-  List<int> _selectedCardIds = [];
-  int? _newFolderId;
+  final List<int> _selectedCardIds = [];
 
   @override
   void initState() {
@@ -42,11 +40,9 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
   }
 
   Future<void> _loadCards() async {
-    Folder userDefaultFolder = await _folderService.getCurrentUserDefaultFolder();
-    List allCards =
-        await _cardService.getAllCardsByFolderId(userDefaultFolder.id!);
+    _cards = await _cardService.getAllCurrentUserCards();
     setState(() {
-      _cards = allCards;
+      _cards;
     });
   }
 
@@ -54,32 +50,25 @@ class _FolderCreateScreenState extends State<FolderCreateScreen> {
 
     // Retrieve the current user session
     Session? currentSession = await _sessionService.getCurrentSession();
-    int currentUserId = currentSession!.currentUser!;
+    int currentUserId = currentSession!.currentUserId!;
 
     // Create the new folder
     Folder newFolder = Folder(name: widget.folderName, userId: currentUserId, imagePath: widget.folderImagePath);
-    _newFolderId = await _folderService.createFolder(newFolder);
+    int newFolderId = await _folderService.createFolder(newFolder);
+
+    print('==================================================${newFolder.id}');
 
     // Assign each selected card to the new folder
     for (var cardId in _selectedCardIds) {
-      await _assignFolderToCard(cardId);
+      await _folderService.addCardToFolder(newFolderId, cardId);
     }
 
-    Navigator.pop(context, true);  // Close the dialog and pass success status
-  }
-
-  Future<void> _assignFolderToCard(int id) async {
-    q.Card? card = await _cardService.getCardById(id);
-
-    if (card != null) {
-      card.folderId = _newFolderId!;
-      await _cardService.updateCard(card);
-    }
-    else {
-      print('Error: Card with ID $id not found');
+    if (mounted) {
+      Navigator.pop(context, true);  // Close the dialog and pass success status
     }
 
   }
+
 
   @override
   Widget build(BuildContext context) {

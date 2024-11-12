@@ -1,6 +1,4 @@
-import 'package:quick_card/repository/folder_repository.dart';
 import 'package:quick_card/repository/user_repository.dart';
-import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/entity/shopping_list.dart';
 import 'package:quick_card/entity/user.dart';
 import 'package:quick_card/service/shopping_list_service.dart';
@@ -14,7 +12,6 @@ class UserService {
       return null;
     } else {
       int userId = await _userRepository.createUser(user);
-      await _createDefaultFolder(userId);
       await _createDefaultShoppingList(userId);
 
       return userId;
@@ -40,11 +37,6 @@ class UserService {
     return null;
   }
 
-  // Get all Users
-  Future<List> getAllUsers() async {
-    return _userRepository.getAllUsers();
-  }
-
   // Get User by username
   Future<User?> getUserByUsername(String username) async {
     User? user = await _userRepository.getUserByUsername(username);
@@ -66,12 +58,6 @@ class UserService {
     return true;
   }
 
-  // Create default folder for new User
-  Future<void> _createDefaultFolder(int userId) async {
-    Folder folder = Folder(name: 'default', userId: userId);
-    await FolderRepository().createFolder(folder);
-  }
-
   // Create default Shopping List for User
   Future<void> _createDefaultShoppingList(int userId) async {
     ShoppingList shoppingList = ShoppingList(name: 'default', userId: userId);
@@ -88,5 +74,4 @@ class UserService {
     int userId = await _userRepository.deleteUser(id);
     return userId;
   }
-
 }

@@ -1,10 +1,10 @@
+import 'package:quick_card/repository/tables/card_folder_table.dart';
 import 'package:quick_card/repository/tables/folder_table.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class FolderRepository {
-
   // Create new Folder
   Future<int> createFolder(Folder folder) async {
     final db = await DatabaseProvider().database;
@@ -15,7 +15,7 @@ class FolderRepository {
     );
   }
 
-  // Get Folder by Id
+  // Get Folder by id
   Future<Folder?> getFolderById(int id) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -38,6 +38,20 @@ class FolderRepository {
       whereArgs: [userId],
     );
     return List.generate(maps.length, (i) => Folder.fromMap(maps[i]));
+  }
+
+  // Add Card to Folder
+  Future<void> addCardToFolder(int folderId, int cardId) async {
+    final db = await DatabaseProvider().database;
+
+    await db.insert(
+      CardFolderTable.tableName,
+      {
+        CardFolderTable.columnFolderId: folderId,
+        CardFolderTable.columnCardId: cardId,
+      },
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
   // Update Folder

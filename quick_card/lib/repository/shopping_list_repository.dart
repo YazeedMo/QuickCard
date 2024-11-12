@@ -4,8 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class ShoppingListRepository {
-
-  // Create new Shopping List
+  // Create new ShoppingList
   Future<int> createShoppingList(ShoppingList shoppingList) async {
     final db = await DatabaseProvider().database;
     return await db.insert(
@@ -15,7 +14,7 @@ class ShoppingListRepository {
     );
   }
 
-  // Get Shopping List by Id
+  // Get ShoppingList by id
   Future<ShoppingList?> getShoppingListById(int id) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -29,7 +28,7 @@ class ShoppingListRepository {
     return null;
   }
 
-  // Get all Shopping Lists by User id
+  // Get all ShoppingLists by User id
   Future<List<ShoppingList>> getShoppingListsByUserId(int userId) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -40,7 +39,7 @@ class ShoppingListRepository {
     return List.generate(maps.length, (i) => ShoppingList.fromMap(maps[i]));
   }
 
-  // Update Shopping List
+  // Update ShoppingList
   Future<int> updateShoppingList(ShoppingList shoppingList) async {
     final db = await DatabaseProvider().database;
     return await db.update(
@@ -51,7 +50,7 @@ class ShoppingListRepository {
     );
   }
 
-  // Delete Shopping List by id
+  // Delete ShoppingList by id
   Future<int> deleteShoppingList(int id) async {
     final db = await DatabaseProvider().database;
     return await db.delete(

@@ -11,7 +11,7 @@ class Item {
     required this.shoppingListId,
   });
 
-  // Convert Item object to a map for database storage
+  // Convert Item object into a map for database storage
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -21,7 +21,7 @@ class Item {
     };
   }
 
-  // Create an Item object from a map
+  // Convert map to Item object
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
       id: map['id'],

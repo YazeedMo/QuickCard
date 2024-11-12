@@ -1,33 +1,31 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
-
 import 'dart:io';
 
 import 'package:barcode/barcode.dart' as bc;
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:quick_card/entity/card.dart' as c;
-import 'package:quick_card/entity/folder.dart';
+import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/service/card_service.dart';
-import 'package:quick_card/service/folder_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/util/card_utils.dart';
 
-class CardCreateScreen extends StatefulWidget {
+class CardCreationScreen extends StatefulWidget {
   final String barcodeData;
   final BarcodeFormat barcodeFormat;
   final bc.Barcode barcodeType;
 
-  CardCreateScreen(
-      {required this.barcodeData,
+  const CardCreationScreen(
+      {super.key,
+      required this.barcodeData,
       required this.barcodeFormat,
       required this.barcodeType});
 
   @override
-  State<CardCreateScreen> createState() => _CardCreateScreenState();
+  State<CardCreationScreen> createState() => _CardCreationScreenState();
 }
 
-class _CardCreateScreenState extends State<CardCreateScreen> {
-  final FolderService _folderService = FolderService();
+class _CardCreationScreenState extends State<CardCreationScreen> {
   final CardService _cardService = CardService();
   final ImagePicker _picker = ImagePicker();
 
@@ -36,15 +34,15 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
   String _cardImagePath = '';
   File? _selectedImageFile;
 
-  final TextEditingController _cardNameController = TextEditingController(text: 'card');
+  final TextEditingController _cardNameController =
+      TextEditingController(text: 'card');
 
-
-  List<Map<String, String>> premadeIcons = CardUtils().premadeIcons;
+  List<Map<String, String>> preloadedIcons = CardUtils().premadeIcons;
 
   // Function to pick image from gallery
   Future<void> _pickImage() async {
     final XFile? pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery);
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedImageFile = File(pickedFile.path);
@@ -53,14 +51,14 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
     }
   }
 
-  void _showPremadeIcons() {
+  void _showPreloadedIcons() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return ListView.builder(
-          itemCount: premadeIcons.length,
+          itemCount: preloadedIcons.length,
           itemBuilder: (context, index) {
-            final icon = premadeIcons[index];
+            final icon = preloadedIcons[index];
             return ListTile(
               leading: Image.asset(icon['assetPath']!, width: 40, height: 40),
               title: Text(icon['name']!),
@@ -68,8 +66,10 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
                 setState(() {
                   _cardImagePath = icon['assetPath']!;
                   _cardName = icon['name']!;
-                  _selectedImageFile = null; // Clear custom image if premade is chosen
-                  _cardNameController.text = _cardName; // Update controller text
+                  _selectedImageFile =
+                      null; // Clear custom image if preloaded is chosen
+                  _cardNameController.text =
+                      _cardName; // Update controller text
                 });
                 Navigator.pop(context);
               },
@@ -80,10 +80,9 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
     );
   }
 
-
   void _createNewCard() async {
-    Folder userDefaultFolder =
-    await _folderService.getCurrentUserDefaultFolder();
+    Session? session = await SessionService().getCurrentSession();
+    int? userId = session!.currentUserId;
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -92,15 +91,17 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
       c.Card newCard = c.Card(
           name: _cardName,
           data: widget.barcodeData,
-          barcodeFormat: widget.barcodeFormat.toString(),
+          format: widget.barcodeFormat.toString(),
           svg: widget.barcodeType
               .toSvg(widget.barcodeData, width: 300, height: 100),
-          folderId: userDefaultFolder.id!,
-          imagePath: _cardImagePath);
+          imagePath: _cardImagePath,
+          userId: userId!);
 
       // Save the card and return to the HomeScreen
       _cardService.createCard(newCard);
-      Navigator.pop(context, true);
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
     }
   }
 
@@ -110,7 +111,8 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('enter card details',
+        title: const Text(
+          'enter card details',
           style: TextStyle(
             fontWeight: FontWeight.bold, // Make the title bold
           ),
@@ -119,94 +121,108 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/default_card_image.jpg',
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(height: 50),
-                TextFormField(
-                  controller: _cardNameController, // Set the controller here
-                  decoration: InputDecoration(labelText: 'card name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'please enter a card name';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _cardName = value!;
-                  },
-                ),
-
-                SizedBox(height: 40),
-                if (_selectedImageFile != null)
-                  Image.file(_selectedImageFile!, height: 150)
-                else if (_cardImagePath.isNotEmpty)
-                  Image.asset(_cardImagePath, height: 150),
-                SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF8EE4DF), // Button background color
-                    foregroundColor: Colors.black, // Text color
-                    minimumSize: Size(380, 60),
-                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (_selectedImageFile != null)
+                    Image.file(_selectedImageFile!, height: 150)
+                  else if (_cardImagePath.isNotEmpty)
+                    Image.asset(_cardImagePath, height: 150)
+                  else
+                    Image.asset(
+                      'assets/default_card_image.jpg',
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  const SizedBox(height: 50),
+                  TextFormField(
+                    controller: _cardNameController, // Set the controller here
+                    decoration: const InputDecoration(labelText: 'card name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'please enter a card name';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _cardName = value!;
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: _pickImage,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFF8EE4DF), // Button background color
+                      foregroundColor: Colors.black, // Text color
+                      minimumSize: const Size(380, 60),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0), // Adjust vertical padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15.0), // Button border radius
+                      ),
+                    ),
+                    child: const Text(
+                      'pick image from gallery',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
-                  child: Text('pick image from gallery',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _showPremadeIcons,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF8EE4DF), // Button background color
-                    foregroundColor: Colors.black, // Text color
-                    minimumSize: Size(380, 60),
-                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0), // Button border radius
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _showPreloadedIcons,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFF8EE4DF), // Button background color
+                      foregroundColor: Colors.black, // Text color
+                      minimumSize: const Size(380, 60),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0), // Adjust vertical padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15.0), // Button border radius
+                      ),
+                    ),
+                    child: const Text(
+                      'choose from common Icons',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
-                  child: Text('choose from premade Icons',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _createNewCard,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF8EE4DF), // Button background color
-                    foregroundColor: Colors.black, // Text color
-                    minimumSize: Size(380, 60), // Set size for the button (height increased)
-                    padding: EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),// Button border radius
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _createNewCard,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFF8EE4DF), // Button background color
+                      foregroundColor: Colors.black, // Text color
+                      minimumSize: const Size(380,
+                          60), // Set size for the button (height increased)
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0), // Adjust vertical padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15.0), // Button border radius
+                      ),
+                    ),
+                    child: const Text(
+                      'add card',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
                     ),
                   ),
-                  child: Text('add card',
-                    style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -216,5 +232,4 @@ class _CardCreateScreenState extends State<CardCreateScreen> {
     _cardNameController.dispose();
     super.dispose();
   }
-
 }

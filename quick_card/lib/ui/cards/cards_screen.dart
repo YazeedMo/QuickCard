@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/card_tile.dart';
 import 'package:quick_card/components/add_button.dart';
@@ -33,9 +31,12 @@ class _CardsScreenState extends State<CardsScreen> {
       _isLoading = true;
     });
     _cards = await _cardService.getAllCurrentUserCards();
-    setState(() {
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
   }
 
   Future<void> _goToCardScanner() async {
@@ -56,9 +57,9 @@ class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDEDCFB),
+      backgroundColor: const Color(0xFFDEDCFB),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child:
                   CircularProgressIndicator(), // Spinner in center when loading
             )
@@ -66,11 +67,11 @@ class _CardsScreenState extends State<CardsScreen> {
               ? Center(
                   child: Text(
                     message,
-                    style: TextStyle(fontSize: 20.0),
+                    style: const TextStyle(fontSize: 20.0),
                   ),
                 )
               : GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // Two columns
                     crossAxisSpacing: 10.0, // Spacing between columns
                     mainAxisSpacing: 0, // Spacing between rows

@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  String title = '';
+  String title = 'your';
   String message = 'No code scanned yet';
 
   int _selectedIndex = 0;

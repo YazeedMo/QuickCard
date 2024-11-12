@@ -1,28 +1,28 @@
 class Session {
   int? id;
-  int? currentUser;
+  int? currentUserId;
   bool stayLoggedIn;
 
   Session({
     this.id,
-    this.currentUser,
+    this.currentUserId,
     this.stayLoggedIn = false,
   });
 
-  // Convert Session object to a map for database storage
+  // Convert Session object into a map for database storage
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'currentUser': currentUser,
+      'currentUserId': currentUserId,
       'stayLoggedIn': stayLoggedIn ? 1 : 0, // Store boolean as integer
     };
   }
 
-  // Create a Session object from a map
+  // Convert map to  Session object
   factory Session.fromMap(Map<String, dynamic> map) {
     return Session(
       id: map['id'],
-      currentUser: map['currentUser'],
+      currentUserId: map['currentUserId'],
       stayLoggedIn: map['stayLoggedIn'] == 1, // Convert integer back to boolean
     );
   }

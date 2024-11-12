@@ -1,8 +1,5 @@
 import 'package:quick_card/repository/card_repository.dart';
 import 'package:quick_card/entity/card.dart';
-import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/service/folder_service.dart';
 import 'package:quick_card/service/session_service.dart';
 
 class CardService {
@@ -13,40 +10,29 @@ class CardService {
     return await _cardRepository.createCard(card);
   }
 
-  // Get all cards
-  Future<List> getAllCards() async {
-    return _cardRepository.getAllCards();
-  }
-
-  // Get all Current User cards
+  // Get all Current User Cards
   Future<List<Card>> getAllCurrentUserCards() async {
-    Session? session = await SessionService().getCurrentSession();
-    int? userId = session!.currentUser;
-    List<Folder> allUserFolders =
-        await FolderService().getFoldersByUserId(userId!);
-    List<Card> allUserCards = [];
-    for (Folder folder in allUserFolders) {
-      List<Card> allFolderCards =
-          await getAllCardsByFolderId(folder.id!);
-      allUserCards.addAll(allFolderCards);
-    }
-    return allUserCards;
+    int currentUserId = await SessionService().getCurrentUserId();
+    return await _cardRepository.getCardsByUserId(currentUserId);
   }
 
-  // Get all cards by Folder id
+  // Get all Cards by Folder id
   Future<List<Card>> getAllCardsByFolderId(int id) async {
     return await _cardRepository.getCardsByFolderId(id);
   }
 
-  // Get card by id
+  // Get Card by id
   Future<Card?> getCardById(int id) async {
     Card? card = await _cardRepository.getCardById(id);
-
     if (card != null) {
       return card;
     }
-
     return null;
+  }
+
+  // Add Card to Folder
+  Future<void> addCardToFolder(int folderId, int cardId) async {
+    await _cardRepository.addCardToFolder(cardId, folderId);
   }
 
   // Update Card
@@ -55,7 +41,7 @@ class CardService {
     return getCardById(updatedCardId);
   }
 
-  // Delete card by id
+  // Delete Card by id
   Future<int> deleteCardById(int id) async {
     return await _cardRepository.deleteCardById(id);
   }

@@ -4,7 +4,6 @@ import '../entity/user.dart';
 import 'database_provider.dart';
 
 class UserRepository {
-
   // Create new User
   Future<int> createUser(User user) async {
     final db = await DatabaseProvider().database;
@@ -15,21 +14,11 @@ class UserRepository {
     );
   }
 
-  // Get all users
-  Future<List<User>> getAllUsers() async {
-    final db = await DatabaseProvider().database;
-    final List<Map<String, dynamic>> maps = await db.query(UserTable.tableName);
-    return List.generate(maps.length, (i) => User.fromMap(maps[i]));
-  }
-
   // Get User by id
   Future<User?> getUserById(int id) async {
     final db = await DatabaseProvider().database;
-    final List<Map<String, dynamic>> maps = await db.query(
-        UserTable.tableName,
-    where: '${UserTable.columnId} = ?',
-    whereArgs: [id]
-    );
+    final List<Map<String, dynamic>> maps = await db.query(UserTable.tableName,
+        where: '${UserTable.columnId} = ?', whereArgs: [id]);
     if (maps.isNotEmpty) {
       return User.fromMap(maps.first);
     }
@@ -50,7 +39,7 @@ class UserRepository {
     return null;
   }
 
-  // Get a User by email
+  // Get User by email
   Future<User?> getUserByEmail(String email) async {
     final db = await DatabaseProvider().database;
     final List<Map<String, dynamic>> maps = await db.query(

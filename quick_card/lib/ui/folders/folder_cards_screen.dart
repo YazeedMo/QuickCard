@@ -5,7 +5,6 @@ import 'package:quick_card/components/card_tile.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:quick_card/ui/cards/card_display_screen.dart';
 import 'package:quick_card/service/card_service.dart';
-import 'package:quick_card/service/folder_service.dart';
 
 class FolderCardsScreen extends StatefulWidget {
   final Folder folder;
@@ -18,7 +17,6 @@ class FolderCardsScreen extends StatefulWidget {
 
 class _FolderCardsScreenState extends State<FolderCardsScreen> {
   String message = 'no cards in this folder';
-  final FolderService _folderService = FolderService();
   final CardService _cardService = CardService();
   List<dynamic> _cards = [];
 

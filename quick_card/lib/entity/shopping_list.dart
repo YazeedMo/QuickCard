@@ -9,7 +9,7 @@ class ShoppingList {
     required this.userId,
   });
 
-  // Convert ShoppingList object to a map for database storage
+  // Convert ShoppingList object into a map for database storage
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -18,7 +18,7 @@ class ShoppingList {
     };
   }
 
-  // Create a ShoppingList object from a map
+  // Convert map to ShoppingList object
   factory ShoppingList.fromMap(Map<String, dynamic> map) {
     return ShoppingList(
       id: map['id'],
