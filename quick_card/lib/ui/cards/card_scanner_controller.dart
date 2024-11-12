@@ -16,7 +16,6 @@ class CardScannerController {
   MobileScannerController? mobileScannerController;
 
   Future<void> addNewCard(BuildContext buildContext) async {
-    print("ccccccccccccccccccccccccccccccccccccccccccccccccc");
     final result = await Navigator.push(
         buildContext,
         MaterialPageRoute(

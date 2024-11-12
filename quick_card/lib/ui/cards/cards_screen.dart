@@ -54,6 +54,15 @@ class _CardsScreenState extends State<CardsScreen> {
     _loadCards();
   }
 
+  void displayBarcode(c.Card card) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CardDisplayScreen(card: card)));
+    if (result == true) {
+      _loadCards();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,13 +94,7 @@ class _CardsScreenState extends State<CardsScreen> {
                       card: card,
                       deleteFunction: (context) => _deleteCard(card.id!),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CardDisplayScreen(svg: card.svg),
-                          ),
-                        );
+                        displayBarcode(card);
                       },
                     );
                   },

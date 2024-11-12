@@ -71,7 +71,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CardDisplayScreen(svg: card.svg),
+                        builder: (context) => CardDisplayScreen(card: card,),
                       ),
                     );
                   },
