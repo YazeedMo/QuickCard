@@ -19,7 +19,7 @@ class AuthService {
     // Handle session if user exists
     Session? currentSession = await _sessionService.getCurrentSession();
     if (currentSession != null) {
-      currentSession.currentUser = user.id;
+      currentSession.currentUserId = user.id;
       currentSession.stayLoggedIn = stayLoggedIn;
       await _sessionService.updateSession(currentSession);
     }

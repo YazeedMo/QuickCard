@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 
 class SessionRepository {
-
   // Create new Session
   Future<int> createSession(Session session) async {
     final db = await DatabaseProvider().database;
@@ -41,6 +40,12 @@ class SessionRepository {
       return Session.fromMap(maps.first);
     }
     return null;
+  }
+
+  // Get current User id
+  Future<int> getCurrentUserId() async {
+    Session? currentSession = await getCurrentSession();
+    return currentSession!.currentUserId!;
   }
 
   // Update Session

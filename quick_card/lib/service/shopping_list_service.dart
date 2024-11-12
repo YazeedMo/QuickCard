@@ -1,5 +1,4 @@
 import 'package:quick_card/repository/shopping_list_repository.dart';
-import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/shopping_list.dart';
 import 'package:quick_card/service/session_service.dart';
 
@@ -14,25 +13,25 @@ class ShoppingListService {
 
   // Get current User's default Shopping List
   Future<ShoppingList> getCurrentUserDefaultShoppingList() async {
-
-    Session? session = await SessionService().getCurrentSession();
-    List allUserLists = await ShoppingListService().getShoppingListsByUserId(session!.currentUser!);
-    ShoppingList shoppingList = await allUserLists.firstWhere((list) => list.name == 'default');
+    int currentUserId = await SessionService().getCurrentUserId();
+    List allUserLists = await ShoppingListService()
+        .getShoppingListsByUserId(currentUserId);
+    ShoppingList shoppingList =
+        await allUserLists.firstWhere((list) => list.name == 'default');
     return shoppingList;
-
   }
 
-  // Get all Shopping List by user id
+  // Get all ShoppingLists by User id
   Future<List<ShoppingList>> getShoppingListsByUserId(int userId) async {
     return await _shoppingListRepository.getShoppingListsByUserId(userId);
   }
 
-  // Update shopping list
+  // Update ShoppingList
   Future<int> updateShoppingList(ShoppingList shoppingList) async {
     return await _shoppingListRepository.updateShoppingList(shoppingList);
   }
 
-  // Delete shopping list by id
+  // Delete shoppingList by id
   Future<int> deleteShoppingList(int id) async {
     return await _shoppingListRepository.deleteShoppingList(id);
   }

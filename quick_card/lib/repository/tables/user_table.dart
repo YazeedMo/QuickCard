@@ -1,4 +1,3 @@
-// user_table.dart
 class UserTable {
   // Define the table name and column names as constants
   static const String tableName = 'users';

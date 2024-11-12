@@ -16,10 +16,11 @@ class CardScannerController {
   MobileScannerController? mobileScannerController;
 
   Future<void> addNewCard(BuildContext buildContext) async {
+    print("ccccccccccccccccccccccccccccccccccccccccccccccccc");
     final result = await Navigator.push(
         buildContext,
         MaterialPageRoute(
-            builder: (context) => CardCreateScreen(
+            builder: (context) => CardCreationScreen(
                 barcodeData: barcodeData!,
                 barcodeFormat: barcodeFormat!,
                 barcodeType: barcodeType!)));

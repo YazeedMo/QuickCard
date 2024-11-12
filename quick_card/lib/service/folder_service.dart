@@ -1,8 +1,5 @@
 import 'package:quick_card/repository/folder_repository.dart';
-import 'package:quick_card/entity/card.dart';
 import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/session_service.dart';
 
 class FolderService {
@@ -13,31 +10,25 @@ class FolderService {
     return await _folderRepository.createFolder(folder);
   }
 
-  // Get all folders by user id
+  // Get all Folders by user id
   Future<List<Folder>> getFoldersByUserId(int userId) async {
     return await _folderRepository.getFoldersByUserId(userId);
   }
 
   // Get all current User's folders
   Future<List<Folder>> getCurrentUserFolders() async {
-    Session? session = await SessionService().getCurrentSession();
-    int? currentUser = session!.currentUser;
-    return await FolderService().getFoldersByUserId(currentUser!);
-  }
-
-  // Get current User's default folder
-  Future<Folder> getCurrentUserDefaultFolder() async {
-
-    Session? session = await SessionService().getCurrentSession();
-    List allUserFolders = await getFoldersByUserId(session!.currentUser!);
-    Folder defaultFolder = await allUserFolders.firstWhere((folder) => folder.name == 'default');
-    return defaultFolder;
-
+    int currentUserId = await SessionService().getCurrentUserId();
+    return await FolderService().getFoldersByUserId(currentUserId);
   }
 
   // Get Folder by id
   Future<Folder?> getFolderById(int id) async {
     return await _folderRepository.getFolderById(id);
+  }
+
+  // Add Card to Folder
+  Future<void> addCardToFolder(int folderId, int cardId) async {
+    await _folderRepository.addCardToFolder(folderId, cardId);
   }
 
   // Update a folder
@@ -47,15 +38,6 @@ class FolderService {
 
   // Delete folder by id
   Future<int> deleteFolder(int id) async {
-
-    Folder defaultFolder = await getCurrentUserDefaultFolder();
-    List<Card> allFolderCards = await CardService().getAllCardsByFolderId(id);
-
-    for (Card card in allFolderCards) {
-      card.folderId = defaultFolder.id!;
-      await CardService().updateCard(card);
-    }
-
     return await _folderRepository.deleteFolder(id);
   }
 }

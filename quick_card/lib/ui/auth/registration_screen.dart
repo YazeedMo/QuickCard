@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/auth_components.dart';
 import 'package:quick_card/components/snackbar_message.dart';
 import 'package:quick_card/ui/auth/registration_controller.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
@@ -51,7 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   children: [
                     // First Profile photo
                     Padding(
-                      padding: EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.only(right: 20),
                       child: ClipOval(
                         child: Image.asset(
                           'assets/holographic.jpeg', // Replace with your image path
@@ -76,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Center(
@@ -84,15 +84,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           'register',
                           style: TextStyle(
                             fontSize: 52.0,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 10.0), // Spacing between the labels
-                        Text(
+                        const SizedBox(height: 10.0), // Spacing between the labels
+                        const Text(
                           'create your account',
                           style: TextStyle(
                             fontSize: 18.0,
@@ -100,7 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         // username
                         AuthTextField(
                           buildContext: context,
@@ -113,7 +113,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               _registrationController.usernameFocusNode,
                           nextFocusNode: _registrationController.emailFocusNode,
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         // email
                         AuthTextField(
                             buildContext: context,
@@ -125,7 +125,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 _registrationController.emailFocusNode,
                             nextFocusNode:
                                 _registrationController.passwordFocusNode),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         // password
                         AuthTextField(
                             buildContext: context,
@@ -138,7 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 _registrationController.passwordFocusNode,
                             nextFocusNode: _registrationController
                                 .confirmPasswordFocusNode),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         // confirm password
                         AuthTextField(
                             buildContext: context,
@@ -150,10 +150,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             thisFocusNode: _registrationController
                                 .confirmPasswordFocusNode),
 
-                        SizedBox(height: 4.0),
+                        const SizedBox(height: 4.0),
                         // Stay logged in checkbox
                         CheckboxListTile(
-                          title: Text("stay logged in"),
+                          title: const Text("stay logged in"),
                           value: _registrationController.stayLoggedIn,
                           onChanged: (value) {
                             setState(() {
@@ -163,19 +163,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
-                        SizedBox(height: 25.0),
+                        const SizedBox(height: 25.0),
                         // register button
                         _isLoading == true
-                            ? LoadingButton()
+                            ? const LoadingButton()
                             : AuthButton(
                                 onTap: _handleRegistration, text: 'register'),
                         Padding(
-                          padding: EdgeInsets.only(top: 15.0),
+                          padding: const EdgeInsets.only(top: 15.0),
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
                             },
-                            child: Text.rich(
+                            child: const Text.rich(
                               TextSpan(
                                 text: 'already have an account? ',
                                 children: [

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/auth_components.dart';
 import 'package:quick_card/components/snackbar_message.dart';
@@ -7,12 +5,14 @@ import 'package:quick_card/ui/auth/login_controller.dart';
 import 'package:quick_card/ui/auth/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _authController = LoginController();
+  final LoginController loginController = LoginController();
   final SnackBarMessage _snackBarMessage = SnackBarMessage();
 
   String? _message;
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    _message = await _authController.handleLogin(context);
+    _message = await loginController.handleLogin(context);
     if (_message != null && mounted) {
       _snackBarMessage.showSnackBar(context, _message!, 2);
     }
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Center(
             child: SingleChildScrollView(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/background.jpg'),
             fit: BoxFit.cover,
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Profile photo at the top
             Padding(
               padding:
-                  EdgeInsets.only(top: 20, bottom: 20), // Padding for spacing
+                  const EdgeInsets.only(top: 20, bottom: 20), // Padding for spacing
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       opacity: const AlwaysStoppedAnimation(.6),
                     ),
                   ),
-                  SizedBox(width: 20), // Space between the two images
+                  const SizedBox(width: 20), // Space between the two images
                   // Second circular image
                   ClipOval(
                     child: Image.asset(
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Center(
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'welcome to',
                     style: TextStyle(
                       fontSize: 32.0,
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       children: [
                         TextSpan(
                           text: 'quick',
@@ -116,9 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
             // Login subtitle
-            Center(
+            const Center(
               child: Text(
                 'login to your account',
                 style: TextStyle(
@@ -127,43 +127,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             // username
             AuthTextField(
                 buildContext: context,
-                controller: _authController.usernameController,
+                controller: loginController.usernameController,
                 text: 'username',
                 imagePath: 'assets/user.png',
                 obscureText: false,
-                thisFocusNode: _authController.usernameFocusNode,
-                nextFocusNode: _authController.passwordFocusNode),
-            SizedBox(height: 25.0),
+                thisFocusNode: loginController.usernameFocusNode,
+                nextFocusNode: loginController.passwordFocusNode),
+            const SizedBox(height: 25.0),
             // password
             AuthTextField(
                 buildContext: context,
-                controller: _authController.passwordController,
+                controller: loginController.passwordController,
                 text: 'password',
                 imagePath: 'assets/lock.png',
                 obscureText: true,
-                thisFocusNode: _authController.passwordFocusNode),
-            SizedBox(height: 4.0),
+                thisFocusNode: loginController.passwordFocusNode),
+            const SizedBox(height: 4.0),
             CheckboxListTile(
-              title: Text('remember me?'),
-              value: _authController.stayLoggedIn,
+              title: const Text('remember me?'),
+              value: loginController.stayLoggedIn,
               onChanged: (value) {
                 setState(() {
-                  _authController.stayLoggedIn = value ?? false;
+                  loginController.stayLoggedIn = value ?? false;
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,
             ),
             // Login button with bold black text
-            SizedBox(height: 25.0),
+            const SizedBox(height: 25.0),
             _isLoading == true
-                ? LoadingButton()
+                ? const LoadingButton()
                 : AuthButton(onTap: _handleLogin, text: 'login'),
             Padding(
-              padding: EdgeInsets.only(top: 15.0),
+              padding: const EdgeInsets.only(top: 15.0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       MaterialPageRoute(
                           builder: (context) => RegistrationScreen()));
                 },
-                child: Text.rich(
+                child: const Text.rich(
                   TextSpan(
                     text: "don't have an account? ",
                     children: [

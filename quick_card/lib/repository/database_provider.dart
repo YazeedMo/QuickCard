@@ -1,4 +1,5 @@
 // database_provider.dart
+import 'package:quick_card/repository/tables/card_folder_table.dart';
 import 'package:quick_card/repository/tables/card_table.dart';
 import 'package:quick_card/repository/tables/folder_table.dart';
 import 'package:quick_card/repository/tables/item_table.dart';
@@ -36,6 +37,7 @@ class DatabaseProvider {
         await db.execute(CardTable.createTableSQL);
         await db.execute(ShoppingListTable.createTableSQL);
         await db.execute(ItemTable.createTableSQL);
+        await db.execute(CardFolderTable.createTableSQL);
       },
     );
   }

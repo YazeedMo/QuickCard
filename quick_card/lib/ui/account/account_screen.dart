@@ -29,7 +29,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void _loadUser() async {
     Session? session = await _sessionService.getCurrentSession();
-    User? currentUser = await _userService.getUserById(session!.currentUser!);
+    User? currentUser = await _userService.getUserById(session!.currentUserId!);
     setState(() {
       user = currentUser;
     });

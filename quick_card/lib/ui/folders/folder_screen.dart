@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -31,6 +29,8 @@ class _FolderScreenState extends State<FolderScreen> {
 
   List<dynamic> _folders = [];
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,9 +38,14 @@ class _FolderScreenState extends State<FolderScreen> {
   }
 
   Future<void> _loadFolders() async {
-    _folders = await _folderService.getCurrentUserFolders();
     setState(() {
-      _folders;
+      _isLoading = true;
+    });
+
+    _folders = await _folderService.getCurrentUserFolders();
+
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -80,15 +85,19 @@ class _FolderScreenState extends State<FolderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDEDCFB),
-      body: _folders.isEmpty
+      backgroundColor: const Color(0xFFDEDCFB),
+      body: _isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ) :
+      _folders.isEmpty
           ? Center(
               child: Text(
                 message,
-                style: TextStyle(fontSize: 20.0),
+                style: const TextStyle(fontSize: 20.0),
               ),
             )
-          : ListView.builder(
+          :
+      ListView.builder(
               itemCount: _folders.length,
               itemBuilder: (context, index) {
                 Folder folder = _folders[index];
@@ -116,7 +125,7 @@ class _FolderScreenState extends State<FolderScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('create new folder'),
+              title: const Text('create new folder'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -124,12 +133,12 @@ class _FolderScreenState extends State<FolderScreen> {
                     // Folder Name Input Field
                     TextField(
                       controller: _folderNameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'folder name',
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Image Picker Button
                     ElevatedButton.icon(
                       onPressed: () async {
@@ -137,17 +146,17 @@ class _FolderScreenState extends State<FolderScreen> {
                         // Update dialog state after picking an image
                         setState(() {});
                       },
-                      icon: Icon(Icons.image),
-                      label: Text('add image from gallery'),
+                      icon: const Icon(Icons.image),
+                      label: const Text('add image from gallery'),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Display the selected image preview (if any)
                     _selectedImageFile != null
                         ? Image.file(
                       _selectedImageFile!,
                       height: 100,
                     )
-                        : Text('no image selected',
+                        : const Text('no image selected',
                         style: TextStyle(color: Colors.grey)),
                   ],
                 ),
@@ -160,14 +169,14 @@ class _FolderScreenState extends State<FolderScreen> {
                     _selectedImageFile = null;
                     Navigator.of(context).pop();
                   },
-                  child: Text('cancel'),
+                  child: const Text('cancel'),
                 ),
                 // Create Button
                 ElevatedButton(
                   onPressed: () {
                     _addNewFolder();
                   },
-                  child: Text('create'),
+                  child: const Text('create'),
                 ),
               ],
             );
