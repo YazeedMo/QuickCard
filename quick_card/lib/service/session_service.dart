@@ -1,4 +1,4 @@
-import 'package:quick_card/data/session_repository.dart';
+import 'package:quick_card/repository/session_repository.dart';
 import 'package:quick_card/entity/session.dart';
 
 class SessionService {

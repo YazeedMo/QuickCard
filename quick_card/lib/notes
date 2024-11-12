@@ -1,0 +1,19 @@
+- Updated project structure to make group collaboration easier and add future updates
+- Organized UI folder to group feature related screens together
+- Creating controller classes for UI screens classes for better UI - logic separation (still in progress)
+- Combined duplicate code for buttons and text fields into one widget with options for differences (auth_components) (still in progress)
+- Small UI changes:
+    - Error messages in auth screens are now SnackBars
+    - 'Done' button on keyboard auto moves to next text field (auth screens only)
+    - Register and Login button same width
+
+
+TODO:
+- Email verification: Bottom of registration_controller.dart (Ethan)
+- Password hashing: io_utils.dart (Ethan)
+- Prompt for original password: change_password_dialogue.dart (Ethan)
+    - Dialogue class now receives original password and 'changePassword' function
+    - Design error messages or style freely - just use the given password and function
+- Shopping list item deletion: item_tile.dart (Johan)
+    - Will likely have to redesign the entire component
+    - Design to your hearts desire - just use the given item, onChecked, and onDelete parameters

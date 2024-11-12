@@ -1,4 +1,4 @@
-import 'package:quick_card/data/tables/session_table.dart';
+import 'package:quick_card/repository/tables/session_table.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';

@@ -1,4 +1,4 @@
-import 'package:quick_card/data/tables/user_table.dart';
+import 'package:quick_card/repository/tables/user_table.dart';
 import 'package:sqflite/sqflite.dart';
 import '../entity/user.dart';
 import 'database_provider.dart';

@@ -2,10 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:barcode/barcode.dart' as bc;
-import 'package:quick_card/screens/card_create_screen.dart';
-import 'package:quick_card/screens/manual_card_screen.dart';
-import 'package:quick_card/util/barcode_utils.dart';
+import 'package:quick_card/ui/cards/card_scanner_controller.dart';
 
 class CardScannerScreen extends StatefulWidget {
   @override
@@ -13,47 +10,20 @@ class CardScannerScreen extends StatefulWidget {
 }
 
 class _CardScannerScreenState extends State<CardScannerScreen> {
-  final BarcodeUtils _barcodeUtils = BarcodeUtils();
 
-  String? barcodeData;
-  BarcodeFormat? barcodeFormat;
-  bc.Barcode? barcodeType;
-  bool isScanning = true;
-  MobileScannerController? mobileScannerController;
+  final CardScannerController _controller = CardScannerController();
 
   @override
   void initState() {
     super.initState();
-    mobileScannerController = MobileScannerController();
-    isScanning = true;
+    _controller.mobileScannerController = MobileScannerController();
+    _controller.isScanning = true;
   }
 
   @override
   void dispose() {
-    mobileScannerController?.dispose();
+    _controller.mobileScannerController?.dispose();
     super.dispose();
-  }
-
-  Future<void> _addNewCard() async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CardCreateScreen(
-                barcodeData: barcodeData!,
-                barcodeFormat: barcodeFormat!,
-                barcodeType: barcodeType!)));
-    if (result == true && mounted) {
-      Navigator.pop(context, true);
-    }
-  }
-
-  Future<void> _addNewManualCard() async {
-    final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ManualCardScreen()));
-
-    if (result == true && mounted) {
-      Navigator.pop(context, true);
-    }
   }
 
   @override
@@ -70,28 +40,28 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
             icon: Icon(Icons.flash_on),
             onPressed: () {
               setState(() {
-                mobileScannerController?.toggleTorch();
+                _controller.mobileScannerController?.toggleTorch();
               });
             },
           ),
         ],
       ),
-      body: isScanning
+      body: _controller.isScanning
           ? MobileScanner(
-              controller: mobileScannerController,
+              controller: _controller.mobileScannerController,
               onDetect: (barcodeCapture) {
                 setState(() {
                   final barcode = barcodeCapture.barcodes.first;
-                  barcodeData = barcode.rawValue;
-                  barcodeFormat = barcode.format;
+                  _controller.barcodeData = barcode.rawValue;
+                  _controller.barcodeFormat = barcode.format;
 
-                  if (barcodeData != null) {
-                    isScanning = false;
-                    mobileScannerController?.dispose();
-                    barcodeType = _barcodeUtils.getBarcodeType(barcodeFormat);
+                  if (_controller.barcodeData != null) {
+                    _controller.isScanning = false;
+                    _controller.mobileScannerController?.dispose();
+                    _controller.barcodeType = _controller.barcodeUtils.getBarcodeType(_controller.barcodeFormat);
                   }
                 });
-                _addNewCard();
+                _controller.addNewCard(context);
               },
             )
           : Center(
@@ -104,14 +74,14 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
         color: Colors.white,
         height: 100,
         child: Center(
-          child: barcodeData != null
+          child: _controller.barcodeData != null
               ? Text(
-                  'scanned code: $barcodeData',
+                  'scanned code: $_controller.barcodeData',
                   style: TextStyle(fontSize: 18),
                 )
               : TextButton(
                   onPressed: () {
-                    _addNewManualCard();
+                    _controller.addNewManualCard(context);
                   },
 
 

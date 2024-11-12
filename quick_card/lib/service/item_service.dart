@@ -1,4 +1,4 @@
-import 'package:quick_card/data/item_repository.dart';
+import 'package:quick_card/repository/item_repository.dart';
 import 'package:quick_card/entity/item.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/shopping_list.dart';

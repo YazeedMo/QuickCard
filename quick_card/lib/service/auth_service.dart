@@ -9,9 +9,6 @@ class AuthService {
 
   Future<String?> login(
       String username, String password, bool stayLoggedIn) async {
-    // Check if fields are empty
-    if (username.isEmpty) return "Please enter username";
-    if (password.isEmpty) return "Please enter password";
 
     // Attempt to validate user
     User? user = await _userService.validateUser(username, password);
@@ -26,7 +23,6 @@ class AuthService {
       currentSession.stayLoggedIn = stayLoggedIn;
       await _sessionService.updateSession(currentSession);
     }
-
     return null; // No error message means success
   }
 }

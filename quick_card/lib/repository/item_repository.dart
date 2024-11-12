@@ -1,10 +1,5 @@
-import 'package:quick_card/data/tables/item_table.dart';
+import 'package:quick_card/repository/tables/item_table.dart';
 import 'package:quick_card/entity/item.dart';
-import 'package:quick_card/entity/session.dart';
-import 'package:quick_card/entity/shopping_list.dart';
-import 'package:quick_card/service/item_service.dart';
-import 'package:quick_card/service/session_service.dart';
-import 'package:quick_card/service/shopping_list_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
 

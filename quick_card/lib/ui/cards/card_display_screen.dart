@@ -5,10 +5,10 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SvgDisplayScreen extends StatelessWidget {
+class CardDisplayScreen extends StatelessWidget {
   final String svg; // String parameter to hold the SVG data
 
-  const SvgDisplayScreen({Key? key, required this.svg}) : super(key: key);
+  const CardDisplayScreen({super.key, required this.svg});
 
   @override
   Widget build(BuildContext context) {

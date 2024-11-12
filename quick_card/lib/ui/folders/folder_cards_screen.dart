@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:quick_card/components/card_tile.dart';
 import 'package:quick_card/entity/folder.dart';
-import 'package:quick_card/screens/svg_display_screen.dart';
+import 'package:quick_card/ui/cards/card_display_screen.dart';
 import 'package:quick_card/service/card_service.dart';
 import 'package:quick_card/service/folder_service.dart';
 
@@ -73,7 +73,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SvgDisplayScreen(svg: card.svg),
+                        builder: (context) => CardDisplayScreen(svg: card.svg),
                       ),
                     );
                   },

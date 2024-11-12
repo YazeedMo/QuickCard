@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_card/entity/session.dart';
 import 'package:quick_card/entity/user.dart';
-import 'package:quick_card/screens/login_screen.dart';
+import 'package:quick_card/ui/account/change_password_dialogue.dart';
+import 'package:quick_card/ui/auth/login_screen.dart';
 import 'package:quick_card/service/session_service.dart';
 import 'package:quick_card/service/user_service.dart';
 
@@ -83,75 +84,9 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void _showChangePasswordDialog() {
-    final _formKey = GlobalKey<FormState>();
-    String newPassword = '';
-    String confirmPassword = '';
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("change password"),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: "new password"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'please enter a new password';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    newPassword = value;
-                  },
-                ),
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: "confirm password"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'please confirm your password';
-                    } else if (value != newPassword) {
-                      return 'passwords do not match';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    confirmPassword = value;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text("cancel"),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-            TextButton(
-              child: Text("change"),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _changePassword(newPassword);
-                  Navigator.of(context).pop(); // Close the dialog
-                  // Optionally, show a success message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('password changed successfully!')),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    showDialog(context: context, builder: (BuildContext context) {
+      return ChangePasswordDialogue(originalPassword: user!.password, changePassword: _changePassword);
+    });
   }
 
   @override

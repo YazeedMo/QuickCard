@@ -1,10 +1,10 @@
 // database_provider.dart
-import 'package:quick_card/data/tables/card_table.dart';
-import 'package:quick_card/data/tables/folder_table.dart';
-import 'package:quick_card/data/tables/item_table.dart';
-import 'package:quick_card/data/tables/session_table.dart';
-import 'package:quick_card/data/tables/shopping_list_table.dart';
-import 'package:quick_card/data/tables/user_table.dart';
+import 'package:quick_card/repository/tables/card_table.dart';
+import 'package:quick_card/repository/tables/folder_table.dart';
+import 'package:quick_card/repository/tables/item_table.dart';
+import 'package:quick_card/repository/tables/session_table.dart';
+import 'package:quick_card/repository/tables/shopping_list_table.dart';
+import 'package:quick_card/repository/tables/user_table.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

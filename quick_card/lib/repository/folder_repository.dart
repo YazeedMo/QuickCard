@@ -1,4 +1,4 @@
-import 'package:quick_card/data/tables/folder_table.dart';
+import 'package:quick_card/repository/tables/folder_table.dart';
 import 'package:quick_card/entity/folder.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_provider.dart';
