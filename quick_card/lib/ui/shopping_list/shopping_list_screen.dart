@@ -41,22 +41,47 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   void toggleItemChecked(Item item, bool? value) async {
     item.checkedOff = value!;
     await _itemService.updateItem(item);
-    setState(() {
-
-    });
+    setState(() {});
   }
 
-
-  void deleteItem(int id) {
-    _itemService.deleteItemById(id);
-    setState(() {
+  Future<void> deleteItem(int id) async {
+    bool confirmDelete = await _showConfirmDeleteDialog();
+    if (confirmDelete) {
+      await _itemService.deleteItemById(id);
       _loadItems();
-    });
+    }
+  }
+
+  Future<bool> _showConfirmDeleteDialog() async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this item?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    ) ??
+        false; // Return false if the dialog is dismissed
   }
 
   void _addItem(String itemName) async {
     ShoppingList userDefaultList =
-        await _shoppingListService.getCurrentUserDefaultShoppingList();
+    await _shoppingListService.getCurrentUserDefaultShoppingList();
     Item item = Item(name: itemName, shoppingListId: userDefaultList.id!);
     await _itemService.createItem(item);
     _loadItems();
@@ -66,29 +91,63 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDEDCFB),
-      body: _isLoading
-          ? Center(
+      body: Column(
+        children: [
+          Expanded(
+            child: _isLoading
+                ? Center(
               child: CircularProgressIndicator(),
             )
-          : _items.isEmpty
-              ? Center(
-                  child: Text(
-                    'no items',
-                    style: TextStyle(fontSize: 20.0),
+                : _items.isEmpty
+                ? Center(
+              child: Text(
+                'No items',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )
+                : ListView.builder(
+              itemCount: _items.length,
+              itemBuilder: (context, index) {
+                final item = _items[index];
+                return ListTile(
+                  title: Text(
+                    item.name,
+                    style: TextStyle(
+                      decoration: item.checkedOff
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
                   ),
-                )
-              : ListView.builder(
-                  itemCount: _items.length,
-                  itemBuilder: (context, index) {
-                    final item = _items[index];
-                    return ItemTile(
-                      item: item,
-                      onChecked: (value) => toggleItemChecked(item, value),
-                      onDelete: () => deleteItem(item.id!),
-                    );
-                  },
-                ),
-      floatingActionButton: AddButton(buttonText: 'add item',onPressed: _showAddItemDialog)
+                  leading: Checkbox(
+                    value: item.checkedOff,
+                    onChanged: (value) {
+                      toggleItemChecked(item, value);
+                    },
+                  ),
+                  trailing: Visibility(
+                    visible: item.checkedOff,
+                    child: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => deleteItem(item.id!),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Color(0xFFDEDCFB),
+            ),
+            padding: EdgeInsets.only(left: 190, bottom: 16, right: 16),
+            child: AddButton(
+              buttonText: 'Add item',
+              onPressed: _showAddItemDialog,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -98,11 +157,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(" add new item"),
+          title: Text("Add new item"),
           content: TextField(
             autofocus: true,
             decoration: InputDecoration(
-              hintText: "enter item name",
+              hintText: "Enter item name",
             ),
             onChanged: (value) {
               newItemName = value;
@@ -110,13 +169,13 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("cancel"),
+              child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("add"),
+              child: Text("Add"),
               onPressed: () {
                 if (newItemName.isNotEmpty) {
                   _addItem(newItemName);
