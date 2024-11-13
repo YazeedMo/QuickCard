@@ -126,9 +126,10 @@ class _CardEditScreenState extends State<CardEditScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'enter card details',
+          'Enter card details',
           style: TextStyle(
             fontWeight: FontWeight.bold,
+
           ),
         ),
       ),
@@ -146,7 +147,7 @@ class _CardEditScreenState extends State<CardEditScreen> {
                 AuthTextField(
                   buildContext: context,
                   controller: _cardNameController,
-                  text: 'card name',
+                  text: 'Card name',
                   obscureText: false,
                   thisFocusNode: _cardNameFocusNode,
                   nextFocusNode: _cardNumberFocusNode,
@@ -155,24 +156,58 @@ class _CardEditScreenState extends State<CardEditScreen> {
                 AuthTextField(
                     buildContext: context,
                     controller: _cardNumberController,
-                    text: 'barcode number',
+                    text: 'Barcode number',
                     obscureText: false,
                     thisFocusNode: _cardNumberFocusNode,
                 ),
-                SizedBox(height: 30,),
-                AuthButton(
-                    onTap: _pickImage,
-                    text: 'pick image from gallery',
+                SizedBox(height: 80,),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffa4a0f9), // Background color
+                    foregroundColor: Colors.black, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+
+                    ),
+                    minimumSize: Size(double.infinity, 70),
+                  ),
+                  child: Text(
+                    "Pick image from gallery",
+                    style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                SizedBox(height: 30,),
-                AuthButton(
-                    onTap: _showPreloadedIcons,
-                    text: 'choose from common icons',
+                SizedBox(height: 50,),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffa4a0f9), // Background color
+                    foregroundColor: Colors.black, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    minimumSize: Size(double.infinity, 70),
+                  ),
+                  child: Text(
+                    "Choose from premade icons",
+                    style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                SizedBox(height: 30,),
-                AuthButton(
-                    onTap: _createNewCard,
-                    text: 'add card',
+                SizedBox(height: 50,),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffa4a0f9), // Background color
+                    foregroundColor: Colors.black, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    minimumSize: Size(double.infinity, 70),
+                  ),
+                  child: Text(
+                    "Add card",
+                    style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),

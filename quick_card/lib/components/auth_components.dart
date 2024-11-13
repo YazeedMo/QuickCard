@@ -63,9 +63,10 @@ class _AuthTextFieldState extends State<AuthTextField> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
           borderSide: BorderSide.none,
+
         ),
         filled: true,
-        fillColor: const Color(0xFFDEDCFB),
+        fillColor:  Color(0xFFDEDCFB),
         suffixIcon: widget.obscureText
             ? GestureDetector(
           onTap: () {
@@ -104,6 +105,10 @@ class AuthButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xff8EE4DF), // Background color
         foregroundColor: Colors.black, // Text color
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+
+        ),
       ),
       child: Text(
         text,
@@ -123,6 +128,9 @@ class LoadingButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xff8EE4DF), // Background color
         foregroundColor: Colors.black, // Spinner color
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    ),
       ),
       child: const SizedBox(
         width: 24.0,
@@ -132,6 +140,7 @@ class LoadingButton extends StatelessWidget {
           color: Colors.black, // Spinner color
         ),
       ),
+
     );
   }
 }

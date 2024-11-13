@@ -38,10 +38,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Center(
             child: SingleChildScrollView(
       child: Container(
         decoration: const BoxDecoration(
+          color: Colors.white,
           image: DecorationImage(
             image: AssetImage('assets/background.jpg'),
             fit: BoxFit.cover,
@@ -50,42 +52,26 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // Profile photo at the top
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 20, bottom: 20), // Padding for spacing
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/greenlight.png', // Replace with your image path
-                      width: 150.0,
-                      height: 170.0,
-                      opacity: const AlwaysStoppedAnimation(.6),
+                  Align(
+                    alignment: Alignment.topCenter,  // Aligns the image to the top of the screen
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 0),  // Ensure no padding at the top
+                      child: Image.asset(
+                        'assets/login-bubble.jpg',
+                        width: 330.0,
+                        height: 330.0,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 20), // Space between the two images
-                  // Second circular image
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/purplelight.png', // Second image path
-                      width: 170.0, // Adjust width
-                      height: 150.0, // Adjust height
-                      opacity: const AlwaysStoppedAnimation(0.6),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+
             Center(
               child: Column(
                 children: [
                   const Text(
-                    'welcome to',
+                    'Welcome to',
                     style: TextStyle(
                       fontSize: 32.0,
                       fontWeight: FontWeight.normal,
@@ -120,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Login subtitle
             const Center(
               child: Text(
-                'login to your account',
+                'Login to your account',
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
@@ -132,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthTextField(
                 buildContext: context,
                 controller: loginController.usernameController,
-                text: 'username',
+                text: 'Username',
                 imagePath: 'assets/user.png',
                 obscureText: false,
                 thisFocusNode: loginController.usernameFocusNode,
@@ -142,13 +128,13 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthTextField(
                 buildContext: context,
                 controller: loginController.passwordController,
-                text: 'password',
+                text: 'Password',
                 imagePath: 'assets/lock.png',
                 obscureText: true,
                 thisFocusNode: loginController.passwordFocusNode),
             const SizedBox(height: 4.0),
             CheckboxListTile(
-              title: const Text('remember me?'),
+              title: const Text('Remember me?'),
               value: loginController.stayLoggedIn,
               onChanged: (value) {
                 setState(() {
@@ -161,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 25.0),
             _isLoading == true
                 ? const LoadingButton()
-                : AuthButton(onTap: _handleLogin, text: 'login'),
+                : AuthButton(onTap: _handleLogin, text: 'Login'),
             Padding(
               padding: const EdgeInsets.only(top: 15.0),
               child: GestureDetector(
@@ -173,10 +159,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: const Text.rich(
                   TextSpan(
-                    text: "don't have an account? ",
+                    text: "Don't have an account? ",
                     children: [
                       TextSpan(
-                        text: 'sign up', // Bold text
+                        text: 'Sign up', // Bold text
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
