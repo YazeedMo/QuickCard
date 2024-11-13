@@ -56,17 +56,17 @@ class _AccountScreenState extends State<AccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("delete account"),
-          content: Text("are you sure you want to delete your account? this action cannot be undone."),
+          title: Text("Delete account"),
+          content: Text("Are you sure you want to delete your account? this action cannot be undone."),
           actions: [
             TextButton(
-              child: Text("cancel"),
+              child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: Text("delete"),
+              child: Text("Delete"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _deleteAccount();
@@ -93,7 +93,8 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDEDCFB),
-      body: Padding(
+      body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -119,10 +120,18 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Colors.black54,
                     ),
                   ),
+                  SizedBox(height: 90),
+                  // Add a static image (e.g., user-selected or default image)
+                  Image.asset(
+                    'assets/user.png', // Path to your image asset
+                    height: 120,
+                    width: 120,
+                    fit: BoxFit.cover,
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 60),
+            SizedBox(height:90),
 
             // Change Password button
             ElevatedButton(
@@ -135,7 +144,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
               child: Text(
-                'change password',
+                'Change password',
                 style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
               ),
             ),
@@ -152,7 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
               child: Text(
-                'logout',
+                'Logout',
                 style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
               ),
             ),
@@ -169,12 +178,13 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
               child: Text(
-                'delete account',
+                'Delete account',
                 style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold ),
               ),
             ),
           ],
         ),
+      ),
       ),
     );
   }

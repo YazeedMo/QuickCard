@@ -107,7 +107,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'enter card details',
+          'Enter card details',
           style: TextStyle(
             fontWeight: FontWeight.bold, // Make the title bold
           ),
@@ -136,13 +136,13 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       fit: BoxFit.cover,
                     ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 80),
                   TextFormField(
                     controller: _cardNameController, // Set the controller here
-                    decoration: InputDecoration(labelText: 'card name'),
+                    decoration: InputDecoration(labelText: 'Card name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'please enter a card name';
+                        return 'Please enter a card name';
                       }
                       return null;
                     },
@@ -153,10 +153,10 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
 
                   SizedBox(height: 30),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'barcode number'),
+                    decoration: InputDecoration(labelText: 'Barcode number'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'please enter the barcode';
+                        return 'Please enter the barcode';
                       }
                       return null;
                     },
@@ -164,7 +164,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       _manualCode = value!;
                     },
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 70),
                   ElevatedButton(
                     onPressed: _pickImage,
                     style: ElevatedButton.styleFrom(
@@ -180,13 +180,13 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       ),
                     ),
                     child: Text(
-                      'pick image from gallery',
+                      'Pick image from gallery',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
                   // New button to show premade icons
-                  SizedBox(height: 20),
+                  SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: _showPremadeIcons,
                     style: ElevatedButton.styleFrom(
@@ -202,12 +202,12 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       ),
                     ),
                     child: Text(
-                      'choose from premade icons',
+                      'Choose from premade icons',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: _createNewCard,
                     style: ElevatedButton.styleFrom(
@@ -224,7 +224,7 @@ class _ManualCardScreenState extends State<ManualCardScreen> {
                       ),
                     ),
                     child: Text(
-                      'add card',
+                      'Add card',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,

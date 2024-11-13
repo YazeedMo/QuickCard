@@ -35,6 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true, // Automatically adjusts for the keyboard
       body: SafeArea(
         child: SingleChildScrollView(
@@ -51,41 +52,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   children: [
                     // First Profile photo
                     Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'assets/holographic.jpeg', // Replace with your image path
-                          width: 60.0,
-                          height: 80.0,
-                          opacity: const AlwaysStoppedAnimation(0.6),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    // Second Profile photo
+                      padding: const EdgeInsets.only(top:0),
+            child: Image.asset(
+              'assets/register-bubble.png',
+              width: 330.0,
+              height: 255.0,
+              fit: BoxFit.contain,
+            ),
+          ),
 
-                    // Third Profile photo
-                    ClipOval(
-                      child: Image.asset(
-                        'assets/greendark.png', // Replace with your image path
-                        width: 80.0,
-                        height: 100.0,
-                        opacity: const AlwaysStoppedAnimation(0.6),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+
+
                   ],
                 ),
-                const SizedBox(height: 20.0),
                 Padding(
-                  padding: const EdgeInsets.all(0.0),
+                  padding: const EdgeInsets.only(top:0),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         const Text(
-                          'register',
+                          'Register',
                           style: TextStyle(
                             fontSize: 52.0,
                           ),
@@ -93,7 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         const SizedBox(height: 10.0), // Spacing between the labels
                         const Text(
-                          'create your account',
+                          'Create your account',
                           style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.black,
@@ -106,7 +94,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           buildContext: context,
                           controller:
                               _registrationController.usernameController,
-                          text: 'username',
+                          text: 'Username',
                           imagePath: 'assets/user.png',
                           obscureText: false,
                           thisFocusNode:
@@ -118,7 +106,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         AuthTextField(
                             buildContext: context,
                             controller: _registrationController.emailController,
-                            text: 'email address',
+                            text: 'Email address',
                             imagePath: 'assets/mail.png',
                             obscureText: false,
                             thisFocusNode:
@@ -131,7 +119,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             buildContext: context,
                             controller:
                                 _registrationController.passwordController,
-                            text: 'password',
+                            text: 'Password',
                             imagePath: 'assets/lock.png',
                             obscureText: true,
                             thisFocusNode:
@@ -144,7 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             buildContext: context,
                             controller: _registrationController
                                 .confirmPasswordController,
-                            text: 'confirm password',
+                            text: 'Confirm password',
                             imagePath: 'assets/lock.png',
                             obscureText: true,
                             thisFocusNode: _registrationController
@@ -153,7 +141,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const SizedBox(height: 4.0),
                         // Stay logged in checkbox
                         CheckboxListTile(
-                          title: const Text("stay logged in"),
+                          title: const Text("Stay logged in"),
                           value: _registrationController.stayLoggedIn,
                           onChanged: (value) {
                             setState(() {
@@ -168,7 +156,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         _isLoading == true
                             ? const LoadingButton()
                             : AuthButton(
-                                onTap: _handleRegistration, text: 'register'),
+                                onTap: _handleRegistration, text: 'Register'),
                         Padding(
                           padding: const EdgeInsets.only(top: 15.0),
                           child: GestureDetector(
@@ -177,10 +165,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             },
                             child: const Text.rich(
                               TextSpan(
-                                text: 'already have an account? ',
+                                text: 'Already have an account? ',
                                 children: [
                                   TextSpan(
-                                    text: 'login', // Bold text
+                                    text: 'Login', // Bold text
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),

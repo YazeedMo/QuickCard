@@ -99,7 +99,7 @@ class _CardsScreenState extends State<CardsScreen> {
                     );
                   },
                 ),
-      floatingActionButton: AddButton(buttonText: 'add card',onPressed: _goToCardScanner)
+      floatingActionButton: AddButton(buttonText: 'Add card',onPressed: _goToCardScanner)
     );
   }
 }

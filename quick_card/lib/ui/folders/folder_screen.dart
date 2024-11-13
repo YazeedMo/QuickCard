@@ -114,7 +114,7 @@ class _FolderScreenState extends State<FolderScreen> {
               },
             ),
 
-    floatingActionButton: AddButton(buttonText: 'add folder',onPressed: () => {showCreateFolderModal(context)},)
+    floatingActionButton: AddButton(buttonText: 'Add folder',onPressed: () => {showCreateFolderModal(context)},)
     );
   }
 
