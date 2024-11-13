@@ -100,25 +100,25 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: ImageIcon(
               AssetImage("assets/selectedwallet.png"),
             ),
-            label: 'cards',
+            label: 'Cards',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
               AssetImage("assets/selected-folder.png"),
             ),
-            label: 'folders',
+            label: 'Folders',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
               AssetImage("assets/selected-list.png"),
             ),
-            label: 'shopping list',
+            label: 'Shopping list',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
               AssetImage("assets/user-selected.png"),
             ),
-            label: 'account',
+            label: 'Account',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -16,7 +16,7 @@ class FolderCardsScreen extends StatefulWidget {
 }
 
 class _FolderCardsScreenState extends State<FolderCardsScreen> {
-  String message = 'no cards in this folder';
+  String message = 'No cards in this folder';
   final CardService _cardService = CardService();
   List<dynamic> _cards = [];
 

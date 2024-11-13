@@ -96,95 +96,95 @@ class _AccountScreenState extends State<AccountScreen> {
       body: SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Username and Email display
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    user?.username ?? 'loading...',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Username and Email display
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      user?.username ?? 'loading...',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    user?.email ?? 'loading...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
+                    SizedBox(height: 8),
+                    Text(
+                      user?.email ?? 'loading...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
                     ),
+                    SizedBox(height: 30),
+                    // Add a static image (e.g., user-selected or default image)
+                    Image.asset(
+                      'assets/user.png', // Path to your image asset
+                      width: MediaQuery.of(context).size.width * 0.32,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height:60),
+
+              // Change Password button
+              ElevatedButton(
+                onPressed: _showChangePasswordDialog, // Show change password dialog
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffa4a0f9),
+                  padding: EdgeInsets.symmetric(vertical: 14.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
-                  SizedBox(height: 90),
-                  // Add a static image (e.g., user-selected or default image)
-                  Image.asset(
-                    'assets/user.png', // Path to your image asset
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
+                ),
+                child: Text(
+                  'Change password',
+                  style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 30),
+
+              // Logout button
+              ElevatedButton(
+                onPressed: _logout, // Use the logout function
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffa4a0f9),
+                  padding: EdgeInsets.symmetric(vertical: 14.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height:90),
-
-            // Change Password button
-            ElevatedButton(
-              onPressed: _showChangePasswordDialog, // Show change password dialog
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffa4a0f9),
-                padding: EdgeInsets.symmetric(vertical: 14.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Text(
+                  'Logout',
+                  style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
                 ),
               ),
-              child: Text(
-                'Change password',
-                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 30),
+              SizedBox(height: 30),
 
-            // Logout button
-            ElevatedButton(
-              onPressed: _logout, // Use the logout function
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffa4a0f9),
-                padding: EdgeInsets.symmetric(vertical: 14.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+              // Delete Account button
+              ElevatedButton(
+                onPressed: _showDeleteAccountDialog, // Show delete confirmation dialog
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffa4a0f9),
+                  padding: EdgeInsets.symmetric(vertical: 14.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+                child: Text(
+                  'Delete account',
+                  style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold ),
                 ),
               ),
-              child: Text(
-                'Logout',
-                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 30),
-
-            // Delete Account button
-            ElevatedButton(
-              onPressed: _showDeleteAccountDialog, // Show delete confirmation dialog
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffa4a0f9),
-                padding: EdgeInsets.symmetric(vertical: 14.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-              ),
-              child: Text(
-                'Delete account',
-                style: TextStyle(fontSize: 23, color: Colors.black,fontWeight: FontWeight.bold ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

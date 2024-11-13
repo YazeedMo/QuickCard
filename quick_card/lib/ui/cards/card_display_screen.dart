@@ -85,10 +85,10 @@ class _CardDisplayScreenState extends State<CardDisplayScreen> {
             backgroundColor: Colors.white,
             flexibleSpace: Center( // Center content in the AppBar
               child: Text(
-                "",
+                "Loyalty card's barcode",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 25.0,
+                  fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),

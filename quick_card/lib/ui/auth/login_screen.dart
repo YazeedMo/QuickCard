@@ -60,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(top: 0),  // Ensure no padding at the top
                       child: Image.asset(
                         'assets/login-bubble.jpg',
-                        width: 330.0,
-                        height: 330.0,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.30,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 30.0),
+            const SizedBox(height: 20.0),
             // Login subtitle
             const Center(
               child: Text(
@@ -144,12 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
               controlAffinity: ListTileControlAffinity.leading,
             ),
             // Login button with bold black text
-            const SizedBox(height: 25.0),
+            const SizedBox(height: 10.0),
             _isLoading == true
                 ? const LoadingButton()
                 : AuthButton(onTap: _handleLogin, text: 'Login'),
             Padding(
-              padding: const EdgeInsets.only(top: 15.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
