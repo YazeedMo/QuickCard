@@ -86,6 +86,9 @@ class RegistrationController {
     if (password.isEmpty) {
       return "Please enter password";
     }
+    if (validatePassword(password) != null) {
+      return validatePassword(password);
+    }
     if (confirmPassword.isEmpty) {
       return "Please confirm password";
     }
@@ -97,11 +100,24 @@ class RegistrationController {
 
   bool validateEmail(String email) {
 
-    // Validate email format here.
-    // Return true is valid, false if not
-    // (Ethan)
+    // Regular expression to validate email format
+    final RegExp emailRegex = RegExp(
+        r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,10}$');
 
-    return true;
+    return emailRegex.hasMatch(email);
+
+  }
+
+  String? validatePassword(String password) {
+
+    if (passwordController.text.length < 5) {
+      return 'Password must be at least 5 characters';
+    }
+    // Other criteria? e.g., must have numbers, must have capital, special char, etc
+    // Likely have to do the same checks in 'changing password' screen
+    // Maybe put this function in io_utils to reduce duplicate code?
+
+    return null;
 
   }
 

@@ -6,8 +6,8 @@ class ChangePasswordDialogue extends StatefulWidget {
 
   const ChangePasswordDialogue(
       {super.key,
-      required this.originalPassword,
-      required this.changePassword});
+        required this.originalPassword,
+        required this.changePassword});
 
   @override
   State<ChangePasswordDialogue> createState() => _ChangePasswordDialogueState();
@@ -15,13 +15,14 @@ class ChangePasswordDialogue extends StatefulWidget {
 
 class _ChangePasswordDialogueState extends State<ChangePasswordDialogue> {
   final formKey = GlobalKey<FormState>();
+  String currentPassword = '';
   String newPassword = '';
   String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("change password ${widget.originalPassword}"),
+      title: Text("Change Password"),
       content: Form(
         key: formKey,
         child: Column(
@@ -29,10 +30,25 @@ class _ChangePasswordDialogueState extends State<ChangePasswordDialogue> {
           children: [
             TextFormField(
               obscureText: true,
-              decoration: const InputDecoration(labelText: "new password"),
+              decoration: const InputDecoration(labelText: "Current Password"),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'please enter a new password';
+                  return 'Please enter your current password';
+                } else if (value != widget.originalPassword) {
+                  return 'Current password is incorrect';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                currentPassword = value;
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              decoration: const InputDecoration(labelText: "New Password"),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a new password';
                 }
                 return null;
               },
@@ -42,12 +58,12 @@ class _ChangePasswordDialogueState extends State<ChangePasswordDialogue> {
             ),
             TextFormField(
               obscureText: true,
-              decoration: const InputDecoration(labelText: "confirm password"),
+              decoration: const InputDecoration(labelText: "Confirm Password"),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'please confirm your password';
+                  return 'Please confirm your password';
                 } else if (value != newPassword) {
-                  return 'passwords do not match';
+                  return 'Passwords do not match';
                 }
                 return null;
               },
@@ -60,20 +76,20 @@ class _ChangePasswordDialogueState extends State<ChangePasswordDialogue> {
       ),
       actions: [
         TextButton(
-          child: Text("cancel"),
+          child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop(); // Close the dialog
           },
         ),
         TextButton(
-          child: Text("change"),
+          child: Text("Change"),
           onPressed: () {
             if (formKey.currentState!.validate()) {
               widget.changePassword(newPassword);
               Navigator.of(context).pop(); // Close the dialog
               // Optionally, show a success message
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('password changed successfully!')),
+                SnackBar(content: Text('Password changed successfully!')),
               );
             }
           },
@@ -82,3 +98,4 @@ class _ChangePasswordDialogueState extends State<ChangePasswordDialogue> {
     );
   }
 }
+
