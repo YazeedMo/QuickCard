@@ -101,7 +101,7 @@ class AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 125.0,
+      width: 150.0,
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
@@ -126,7 +126,6 @@ class LoadingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 125.0,
       child: ElevatedButton(
         onPressed: () => {}, // Disables the button
         style: ElevatedButton.styleFrom(

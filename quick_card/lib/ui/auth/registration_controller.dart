@@ -20,7 +20,7 @@ class RegistrationController {
       TextEditingController();
   final FocusNode confirmPasswordFocusNode = FocusNode();
 
-  bool stayLoggedIn = true;
+  bool stayLoggedIn = false;
 
   Future<String?> handleRegistration(BuildContext buildContext) async {
     String? message;
