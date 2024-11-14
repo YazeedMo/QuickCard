@@ -70,7 +70,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         const Text(
                           'Register',
@@ -146,7 +146,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           onChanged: (value) {
                             setState(() {
                               _registrationController.stayLoggedIn =
-                                  value ?? false;
+                                  value ?? true;
                             });
                           },
                           controlAffinity: ListTileControlAffinity.leading,

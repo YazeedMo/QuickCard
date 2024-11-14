@@ -11,7 +11,7 @@ class LoginController {
   final FocusNode usernameFocusNode = FocusNode();
   final TextEditingController passwordController = TextEditingController();
   final FocusNode passwordFocusNode = FocusNode();
-  bool stayLoggedIn = true;
+  bool stayLoggedIn = false;
 
   Future<String?> handleLogin(BuildContext context) async {
     String username = usernameController.text.trim();

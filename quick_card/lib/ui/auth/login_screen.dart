@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
               value: loginController.stayLoggedIn,
               onChanged: (value) {
                 setState(() {
-                  loginController.stayLoggedIn = value ?? false;
+                  loginController.stayLoggedIn = value ?? true;
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,
