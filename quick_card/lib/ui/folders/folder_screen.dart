@@ -86,18 +86,20 @@ class _FolderScreenState extends State<FolderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFDEDCFB),
-      body: _isLoading ? const Center(
-        child: CircularProgressIndicator(),
-      ) :
-      _folders.isEmpty
-          ? Center(
-              child: Text(
-                message,
-                style: const TextStyle(fontSize: 20.0),
-              ),
-            )
-          :
-      ListView.builder(
+      body: Column(
+      children: [
+        Expanded(
+          child: _isLoading ? const Center(
+            child: CircularProgressIndicator(),
+          ) :
+          _folders.isEmpty
+              ? Center(
+                  child: Text(
+                    message,
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
+                )
+          : ListView.builder(
               itemCount: _folders.length,
               itemBuilder: (context, index) {
                 Folder folder = _folders[index];
@@ -110,11 +112,14 @@ class _FolderScreenState extends State<FolderScreen> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       FolderCardsScreen(folder: folder)))
-                        });
+                        }
+                        );
               },
             ),
-
-    floatingActionButton: AddButton(buttonText: 'Add folder',onPressed: () => {showCreateFolderModal(context)},)
+        ),
+        AddButton(buttonText: 'Add folder',onPressed: () => {showCreateFolderModal(context)},),
+        ]
+      ),
     );
   }
 

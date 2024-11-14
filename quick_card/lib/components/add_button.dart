@@ -8,21 +8,29 @@ class AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: 180.0,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xffa4a0f9),
-          foregroundColor: Colors.black,
-          padding: EdgeInsets.symmetric(vertical: 5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+    return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+        color: Color(0xFFDEDCFB),
+    ),
+      padding: EdgeInsets.only(left: 190, right: 16, top: 16, bottom: 16),
+      child: SizedBox(width: 150.0,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xffa4a0f9),
+            foregroundColor: Colors.black,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: Text(
+          buttonText,
+          style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
           ),
         ),
-        child: Text(
-        buttonText,
-        style: TextStyle(fontSize: 27.0, fontWeight: FontWeight.bold),
       ),
-      ),);
+    );
   }
 }

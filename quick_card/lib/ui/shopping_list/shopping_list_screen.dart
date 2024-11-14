@@ -135,17 +135,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               },
             ),
           ),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Color(0xFFDEDCFB),
-            ),
-            padding: EdgeInsets.only(left: 190, bottom: 16, right: 16),
-            child: AddButton(
-              buttonText: 'Add item',
-              onPressed: _showAddItemDialog,
-            ),
-          ),
+           AddButton( buttonText: 'Add item', onPressed: _showAddItemDialog),
         ],
       ),
     );

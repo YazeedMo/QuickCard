@@ -67,39 +67,45 @@ class _CardsScreenState extends State<CardsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFDEDCFB),
-      body: _isLoading
-          ? const Center(
-              child:
-                  CircularProgressIndicator(), // Spinner in center when loading
-            )
-          : _cards.isEmpty
-              ? Center(
-                  child: Text(
-                    message,
-                    style: const TextStyle(fontSize: 20.0),
+      body: Column(
+          children: [
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                    child:
+                      CircularProgressIndicator(), // Spinner in center when loading
+                  )
+                  : _cards.isEmpty
+                    ? Center(
+                      child: Text(
+                        message,
+                        style: const TextStyle(fontSize: 20.0),
+                      ),
+                    )
+                    : GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Two columns
+                        crossAxisSpacing: 10.0, // Spacing between columns
+                        mainAxisSpacing: 0, // Spacing between rows
+                        childAspectRatio: 0.9, // Aspect ratio of each card
+                      ),
+                        padding: const EdgeInsets.all(10.0),
+                        itemCount: _cards.length,
+                        itemBuilder: (context, index) {
+                          final card = _cards[index];
+                          return CardTile(
+                            card: card,
+                            deleteFunction: (context) => _deleteCard(card.id!),
+                            onTap: () {
+                              displayBarcode(card);
+                            },
+                          );
+                        },
                   ),
-                )
-              : GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Two columns
-                    crossAxisSpacing: 10.0, // Spacing between columns
-                    mainAxisSpacing: 0, // Spacing between rows
-                    childAspectRatio: 0.9, // Aspect ratio of each card
-                  ),
-                  padding: const EdgeInsets.all(10.0),
-                  itemCount: _cards.length,
-                  itemBuilder: (context, index) {
-                    final card = _cards[index];
-                    return CardTile(
-                      card: card,
-                      deleteFunction: (context) => _deleteCard(card.id!),
-                      onTap: () {
-                        displayBarcode(card);
-                      },
-                    );
-                  },
-                ),
-      floatingActionButton: AddButton(buttonText: 'Add card',onPressed: _goToCardScanner)
+            ),
+            AddButton(buttonText: 'Add card',onPressed: _goToCardScanner),
+         ]
+      )
     );
   }
 }

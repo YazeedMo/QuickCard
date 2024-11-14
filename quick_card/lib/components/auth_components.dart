@@ -100,19 +100,21 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xff8EE4DF), // Background color
-        foregroundColor: Colors.black, // Text color
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-
+    return SizedBox(
+      width: 125.0,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xff8EE4DF), // Background color
+          foregroundColor: Colors.black, // Text color
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+          ),
         ),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -123,24 +125,26 @@ class LoadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => {}, // Disables the button
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xff8EE4DF), // Background color
-        foregroundColor: Colors.black, // Spinner color
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(15.0),
-    ),
-      ),
-      child: const SizedBox(
-        width: 24.0,
-        height: 24.0,
-        child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          color: Colors.black, // Spinner color
+    return SizedBox(
+      width: 125.0,
+      child: ElevatedButton(
+        onPressed: () => {}, // Disables the button
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xff8EE4DF), // Background color
+          foregroundColor: Colors.black, // Spinner color
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+          ),
+        ),
+        child: const SizedBox(
+          width: 24.0,
+          height: 24.0,
+          child: CircularProgressIndicator(
+            strokeWidth: 3.0,
+            color: Colors.black, // Spinner color
+          ),
         ),
       ),
-
     );
   }
 }
