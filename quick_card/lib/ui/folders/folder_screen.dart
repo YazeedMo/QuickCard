@@ -19,7 +19,7 @@ class FolderScreen extends StatefulWidget {
 class _FolderScreenState extends State<FolderScreen> {
   final FolderService _folderService = FolderService();
 
-  String message = 'no folder yet';
+  String message = 'No folder yet';
   final TextEditingController _folderNameController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
@@ -52,7 +52,7 @@ class _FolderScreenState extends State<FolderScreen> {
   Future<void> _addNewFolder() async {
     String folderName = _folderNameController.text.trim();
     if (folderName.isEmpty) {
-      folderName = 'card folder';
+      folderName = 'Card folder';
     }
     final result = await Navigator.push(
         context,
@@ -125,7 +125,7 @@ class _FolderScreenState extends State<FolderScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: const Text('create new folder'),
+              title: const Text('Create new folder'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -134,7 +134,7 @@ class _FolderScreenState extends State<FolderScreen> {
                     TextField(
                       controller: _folderNameController,
                       decoration: const InputDecoration(
-                        labelText: 'folder name',
+                        labelText: 'Folder name',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -147,7 +147,7 @@ class _FolderScreenState extends State<FolderScreen> {
                         setState(() {});
                       },
                       icon: const Icon(Icons.image),
-                      label: const Text('add image from gallery'),
+                      label: const Text('Add image from gallery'),
                     ),
                     const SizedBox(height: 10),
                     // Display the selected image preview (if any)
@@ -156,7 +156,7 @@ class _FolderScreenState extends State<FolderScreen> {
                       _selectedImageFile!,
                       height: 100,
                     )
-                        : const Text('no image selected',
+                        : const Text('No image selected',
                         style: TextStyle(color: Colors.grey)),
                   ],
                 ),
@@ -169,14 +169,14 @@ class _FolderScreenState extends State<FolderScreen> {
                     _selectedImageFile = null;
                     Navigator.of(context).pop();
                   },
-                  child: const Text('cancel'),
+                  child: const Text('Cancel'),
                 ),
                 // Create Button
                 ElevatedButton(
                   onPressed: () {
                     _addNewFolder();
                   },
-                  child: const Text('create'),
+                  child: const Text('Create'),
                 ),
               ],
             );

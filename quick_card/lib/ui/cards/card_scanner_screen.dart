@@ -31,7 +31,7 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('mobile scanner',
+        title: Text('Mobile scanner',
         style: TextStyle(
           fontWeight: FontWeight.bold), // Make the title bold
         ),
@@ -66,7 +66,7 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
             )
           : Center(
               child: Text(
-                'processing...',
+                'Processing...',
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -86,7 +86,7 @@ class _CardScannerScreenState extends State<CardScannerScreen> {
 
 
                   child: Text(
-                    'or enter barcode manually',
+                    'Or enter barcode manually',
                     style: TextStyle(fontSize: 22, color: Colors.black,fontWeight: FontWeight.bold),
                   ),
                 ),

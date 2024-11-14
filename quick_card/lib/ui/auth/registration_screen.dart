@@ -55,8 +55,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       padding: const EdgeInsets.only(top:0),
             child: Image.asset(
               'assets/register-bubble.png',
-              width: 330.0,
-              height: 255.0,
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.20,
               fit: BoxFit.contain,
             ),
           ),
@@ -151,14 +151,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
-                        const SizedBox(height: 25.0),
+                        const SizedBox(height: 10.0),
                         // register button
                         _isLoading == true
                             ? const LoadingButton()
-                            : AuthButton(
-                                onTap: _handleRegistration, text: 'Register'),
+                            : AuthButton(onTap: _handleRegistration, text: 'Register'),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15.0),
+                          padding: const EdgeInsets.only(top: 10.0),
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pop(context);

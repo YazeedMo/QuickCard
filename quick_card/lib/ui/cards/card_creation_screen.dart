@@ -112,7 +112,7 @@ class _CardCreationScreenState extends State<CardCreationScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'enter card details',
+          'Enter card details',
           style: TextStyle(
             fontWeight: FontWeight.bold, // Make the title bold
           ),
@@ -141,10 +141,10 @@ class _CardCreationScreenState extends State<CardCreationScreen> {
                   const SizedBox(height: 50),
                   TextFormField(
                     controller: _cardNameController, // Set the controller here
-                    decoration: const InputDecoration(labelText: 'card name'),
+                    decoration: const InputDecoration(labelText: 'Card name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'please enter a card name';
+                        return 'Please enter a card name';
                       }
                       return null;
                     },
@@ -168,7 +168,7 @@ class _CardCreationScreenState extends State<CardCreationScreen> {
                       ),
                     ),
                     child: const Text(
-                      'pick image from gallery',
+                      'Pick image from gallery',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
@@ -189,7 +189,7 @@ class _CardCreationScreenState extends State<CardCreationScreen> {
                       ),
                     ),
                     child: const Text(
-                      'choose from common Icons',
+                      'Choose from common icons',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
@@ -211,7 +211,7 @@ class _CardCreationScreenState extends State<CardCreationScreen> {
                       ),
                     ),
                     child: const Text(
-                      'add card',
+                      'Add card',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
